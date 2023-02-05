@@ -17,4 +17,7 @@
 
 <resources>
     <string name="app_name">Timetable manager</string>
+    <string name="edit_option">Изменить</string>
+    <string name="delete_option">Удалить</string>
+    <string name="timetable_page_title">Расписание</string>
 </resources>
