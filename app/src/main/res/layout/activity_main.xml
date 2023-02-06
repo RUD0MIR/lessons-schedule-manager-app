@@ -21,43 +21,44 @@
             app:navigationIcon="@drawable/ic_app_bar_menu"
             />
     </com.google.android.material.appbar.AppBarLayout>
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:tabIndicatorColor="@color/orange"-->
-<!--        app:tabSelectedTextColor="@color/orange">-->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/week_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/orange"
+        app:tabSelectedTextColor="@color/orange">
 
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Пн"-->
-<!--            />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Вт"-->
-<!--            />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Ср"-->
-<!--            />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Чт"-->
-<!--            />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Пт"-->
-<!--            />-->
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Сб"-->
-<!--            />-->
-<!--    </com.google.android.material.tabs.TabLayout>-->
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/monday_tab_option"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tuesday_tab_option"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wednesday_tab_option"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thursday_tab_option"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friday_tab_option"
+            />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saturday_tab_option"
+            />
+    </com.google.android.material.tabs.TabLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

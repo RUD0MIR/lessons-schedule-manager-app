@@ -18,15 +18,22 @@ package com.example.affirmations
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.adapter.TimeTableAdapter
-import com.example.affirmations.data.DataSource
 import com.example.affirmations.data.TimeTableItem
 import com.example.affirmations.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayout
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
     private val newTimeTAbleActivityRequestCode = 1
@@ -44,11 +51,13 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.topAppBar.setNavigationOnClickListener {v: View ->
-            showMenu(v, R.menu.menu)
+            showAppBarMenu(v, R.menu.app_bar_menu)
         }
 
         //Recycler view and data
-        val timeTableAdapter = TimeTableAdapter{ timeTableItem -> adapterOnClick(timeTableItem)  }
+        val timeTableAdapter = TimeTableAdapter(
+            context = this@MainActivity
+        ) { itemView -> adapterOnLongClick(itemView) }
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = timeTableAdapter
@@ -58,41 +67,51 @@ class MainActivity : AppCompatActivity() {
                 timeTableAdapter.submitList(it as MutableList<TimeTableItem>)
             }
         }
+
+        binding.weekTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                //TODO:Handle tabs select
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+        })
     }
 
-    private fun adapterOnClick(timeTableItem: TimeTableItem) {
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.app_bar_menu, menu)
     }
 
-    //App bar menu
-    private fun showMenu(view: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(this@MainActivity, view)
+    private fun adapterOnLongClick(view: View) {
+        showContextMenu(view, R.menu.list_item_menu)
+    }
+
+    //Methods for menus
+    private fun showContextMenu(v: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(this@MainActivity, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
 
-//        popup.setOnMenuItemClickListener {
-//        }
-
-        popup.setOnDismissListener {
-            popup.dismiss()
+        popup.setOnMenuItemClickListener {
+            TODO("menuItem: MenuItem ->")
         }
-        // Show the popup menu.
+
         popup.show()
     }
 
-    //Tabs
-//    tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//
-//        override fun onTabSelected(tab: TabLayout.Tab?) {
-//             Handle tab select
-//        }
-//
-//        override fun onTabReselected(tab: TabLayout.Tab?) {
-//             Handle tab reselect
-//        }
-//
-//        override fun onTabUnselected(tab: TabLayout.Tab?) {
-//             Handle tab unselect
-//        }
-//    })
+    private fun showAppBarMenu(view: View, @MenuRes menuRes: Int) {
+        val popup = PopupMenu(this@MainActivity, view)
+        popup.menuInflater.inflate(menuRes, popup.menu)
 
-    //
+        popup.setOnMenuItemClickListener {
+            TODO("menuItem: MenuItem ->")
+        }
+
+        popup.show()
+    }
 }

@@ -23,7 +23,9 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
-    android:paddingVertical="4dp">
+    android:paddingVertical="4dp"
+    android:longClickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
     <TextView
         android:id="@+id/timetb_number"
         android:layout_width="24dp"

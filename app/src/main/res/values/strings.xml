@@ -17,7 +17,16 @@
 
 <resources>
     <string name="app_name">Timetable manager</string>
+<!--menus options-->
     <string name="edit_option">Изменить</string>
     <string name="delete_option">Удалить</string>
+    <string name="disable_option">Выключить</string>
+
     <string name="timetable_page_title">Расписание</string>
+    <string name="monday_tab_option">Пн</string>
+    <string name="tuesday_tab_option">Вт</string>
+    <string name="wednesday_tab_option">Ср</string>
+    <string name="thursday_tab_option">Чт</string>
+    <string name="friday_tab_option">Пт</string>
+    <string name="saturday_tab_option">Сб</string>
 </resources>
