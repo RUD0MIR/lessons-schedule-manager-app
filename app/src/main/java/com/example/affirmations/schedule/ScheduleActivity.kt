@@ -14,38 +14,46 @@
  * limitations under the License.
  */
 
-package com.example.affirmations
+package com.example.affirmations.schedule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.example.affirmations.R
+import com.example.affirmations.adapter.DaysPagerAdapter
 import com.example.affirmations.adapter.TimeTableAdapter
 import com.example.affirmations.data.TimeTableItem
-import com.example.affirmations.databinding.ActivityMainBinding
+import com.example.affirmations.data.daysOfWeek
+import com.example.affirmations.databinding.ActivityScheduleBinding
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
-    private val newTimeTAbleActivityRequestCode = 1
+class ScheduleActivity : FragmentActivity() {
+
+    private lateinit var adapter: DaysPagerAdapter
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
+
+    private lateinit var binding: ActivityScheduleBinding
+
     private val timeTableListViewModel by viewModels<TimeTableListViewModel> {
         TimeTableListViewModelFactory(this)
     }
 
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -54,58 +62,31 @@ class MainActivity : AppCompatActivity() {
             showAppBarMenu(v, R.menu.app_bar_menu)
         }
 
-        //Recycler view and data
-        val timeTableAdapter = TimeTableAdapter(
-            context = this@MainActivity
-        ) { itemView -> adapterOnLongClick(itemView) }
+        //ViewPager
+        adapter = DaysPagerAdapter(this)
+        viewPager = findViewById(R.id.schedule_pager)
+        viewPager.adapter = adapter
 
-        val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.adapter = timeTableAdapter
+        tabLayout = binding.weekTabLayout
 
-        timeTableListViewModel.timeTableLiveData.observe(this) {
-            it?.let {
-                timeTableAdapter.submitList(it as MutableList<TimeTableItem>)
-            }
-        }
-
-        binding.weekTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                //TODO:Handle tabs select
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-        })
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            //TODO:??
+            tab.text = daysOfWeek()[position]
+        }.attach()
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
         super.onCreateContextMenu(menu, v, menuInfo)
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.app_bar_menu, menu)
     }
 
-    private fun adapterOnLongClick(view: View) {
-        showContextMenu(view, R.menu.list_item_menu)
-    }
-
-    //Methods for menus
-    private fun showContextMenu(v: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(this@MainActivity, v)
-        popup.menuInflater.inflate(menuRes, popup.menu)
-
-        popup.setOnMenuItemClickListener {
-            TODO("menuItem: MenuItem ->")
-        }
-
-        popup.show()
-    }
-
     private fun showAppBarMenu(view: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(this@MainActivity, view)
+        val popup = PopupMenu(this@ScheduleActivity, view)
         popup.menuInflater.inflate(menuRes, popup.menu)
 
         popup.setOnMenuItemClickListener {

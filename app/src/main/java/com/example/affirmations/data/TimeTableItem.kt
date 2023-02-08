@@ -5,5 +5,6 @@ data class TimeTableItem(
         val id: Long,
         val subject: String,
         val time: String,
-        val number: Int
+        val number: Int,
+        val dayOfWeek: String
 )

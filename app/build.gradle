@@ -37,19 +37,13 @@ android {
 }
 
 dependencies {
-
-//    implementation 'androidx.core:core-ktx:1.8.0'
-//    implementation 'androidx.appcompat:appcompat:1.4.2'
-//    implementation 'com.google.android.material:material:1.8.0'
-//    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-//    testImplementation 'junit:junit:4.13.2'
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.core:core-ktx:$rootProject.coreKtxVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
 
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
 
@@ -58,4 +52,7 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.liveDataVersion"
+    //ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
 }

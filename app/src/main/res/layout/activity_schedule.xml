@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".schedule.ScheduleActivity"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -59,10 +59,11 @@
             android:text="@string/saturday_tab_option"
             />
     </com.google.android.material.tabs.TabLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/schedule_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/time_table_list_item" />
+        android:layout_height="match_parent">
+    </androidx.viewpager2.widget.ViewPager2>
+
+
 </LinearLayout>

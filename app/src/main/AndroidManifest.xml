@@ -25,7 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TimetableManager">
-        <activity android:name=".MainActivity"
+        <activity android:name=".schedule.ScheduleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

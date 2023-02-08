@@ -1,20 +1,13 @@
 package com.example.affirmations.adapter
 
 import android.content.Context
-import android.util.Log
-import android.view.ContextMenu
-import android.view.ContextMenu.ContextMenuInfo
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.affirmations.MainActivity
 import com.example.affirmations.R
 import com.example.affirmations.data.TimeTableItem
 
