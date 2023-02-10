@@ -14,7 +14,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/timetable_page_title"
+            app:title="@string/schedule_page_title"
             app:subtitleTextAppearance="@style/TextAppearance.Material3.HeadlineSmall"
             app:titleCentered="true"
             app:titleTextColor="@color/white"
@@ -31,32 +31,26 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/monday_tab_option"
             />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tuesday_tab_option"
             />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wednesday_tab_option"
             />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/thursday_tab_option"
             />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/friday_tab_option"
             />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/saturday_tab_option"
             />
     </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager2.widget.ViewPager2

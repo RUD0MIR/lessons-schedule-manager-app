@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/schedule_option"
+        android:title="@string/schedule_option" />
+    <item android:id="@+id/subjects_option"
+        android:title="@string/subject_list_option" />
+</menu>

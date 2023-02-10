@@ -16,38 +16,41 @@
 
 package com.example.affirmations.schedule
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.PopupMenu
-import androidx.annotation.MenuRes
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.MenuRes
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.affirmations.R
 import com.example.affirmations.adapter.DaysPagerAdapter
-import com.example.affirmations.adapter.TimeTableAdapter
-import com.example.affirmations.data.TimeTableItem
+import com.example.affirmations.time_table.TimeTableActivity
 import com.example.affirmations.data.daysOfWeek
 import com.example.affirmations.databinding.ActivityScheduleBinding
+import com.example.affirmations.subjects.SubjectsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.util.*
 
-private const val TAG = "MainActivity"
+
+private const val TAG = "ScheduleActivity"
 
 class ScheduleActivity : FragmentActivity() {
 
     private lateinit var adapter: DaysPagerAdapter
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
+    private val context = this
 
     private lateinit var binding: ActivityScheduleBinding
 
-    private val timeTableListViewModel by viewModels<TimeTableListViewModel> {
-        TimeTableListViewModelFactory(this)
+    private val scheduleViewModel by viewModels<ScheduleViewModel> {
+        ScheduleViewModelFactory(this)
     }
 
 
@@ -59,7 +62,7 @@ class ScheduleActivity : FragmentActivity() {
 
 
         binding.topAppBar.setNavigationOnClickListener {v: View ->
-            showAppBarMenu(v, R.menu.app_bar_menu)
+            showAppBarMenu(v, R.menu.schedule_app_bar_menu)
         }
 
         //ViewPager
@@ -69,10 +72,15 @@ class ScheduleActivity : FragmentActivity() {
 
         tabLayout = binding.weekTabLayout
 
+        val calendar: Calendar = Calendar.getInstance()
+        val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            //TODO:??
             tab.text = daysOfWeek()[position]
+            tabLayout.getTabAt(currentDayOfWeek - 2)?.select()
         }.attach()
+
+
     }
 
     override fun onCreateContextMenu(
@@ -82,17 +90,34 @@ class ScheduleActivity : FragmentActivity() {
     ) {
         super.onCreateContextMenu(menu, v, menuInfo)
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.app_bar_menu, menu)
+        inflater.inflate(R.menu.schedule_app_bar_menu, menu)
     }
 
     private fun showAppBarMenu(view: View, @MenuRes menuRes: Int) {
-        val popup = PopupMenu(this@ScheduleActivity, view)
-        popup.menuInflater.inflate(menuRes, popup.menu)
+        val menu = PopupMenu(this@ScheduleActivity, view)
+        menu.menuInflater.inflate(menuRes, menu.menu)
 
-        popup.setOnMenuItemClickListener {
-            TODO("menuItem: MenuItem ->")
+        menu.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.subjects_option -> {
+                    switchActivities(SubjectsActivity::class.java)
+                    true
+                }
+                R.id.time_table_option -> {
+                    switchActivities(TimeTableActivity::class.java)
+                    true
+                }
+                else -> {
+                    Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+                    true
+                }
+            }
         }
+        menu.show()
+    }
 
-        popup.show()
+    private fun switchActivities(destination: Class<*>) {
+        val switchActivityIntent = Intent(this, destination)
+        startActivity(switchActivityIntent)
     }
 }

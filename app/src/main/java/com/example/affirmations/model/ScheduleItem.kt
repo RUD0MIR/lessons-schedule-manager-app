@@ -1,7 +1,7 @@
-package com.example.affirmations.data
+package com.example.affirmations.model
 
 
-data class TimeTableItem(
+data class ScheduleItem(
         val id: Long,
         val subject: String,
         val time: String,

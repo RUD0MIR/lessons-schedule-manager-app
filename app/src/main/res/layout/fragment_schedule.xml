@@ -22,6 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/time_table_list_item" />
+        tools:listitem="@layout/schedule_list_item" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

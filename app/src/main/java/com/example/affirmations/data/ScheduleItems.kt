@@ -1,37 +1,36 @@
 package com.example.affirmations.data
 
 import android.content.res.Resources
-import javax.security.auth.Subject
+import com.example.affirmations.model.Subject
+import com.example.affirmations.model.ScheduleItem
 
-fun timeTableList(resources: Resources): List<TimeTableItem> {
+fun scheduleList(resources: Resources): List<ScheduleItem> {
     var id: Long = 1
     //TODO: Extract time of classes into class
     //TODO: Remove days of week
-
-
         return mutableListOf(
-                TimeTableItem(
+                ScheduleItem(
                         id,
                         "Разработка программных модулей",
                         timeMap.getValue(3),
                         3,
                         daysOfWeek()[0]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Стандартизация, сертификация и техническое документоведение",
                         timeMap.getValue(4),
                         4,
                         daysOfWeek()[0]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Иностранный язык в проф деятельности",
                         timeMap.getValue(5),
                         5,
                         daysOfWeek()[0]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка мобильных приложений",
                         timeMap.getValue(6),
@@ -39,34 +38,34 @@ fun timeTableList(resources: Resources): List<TimeTableItem> {
                         daysOfWeek()[0]
                 ),
 
-                TimeTableItem(id++,
+                ScheduleItem(id++,
                         "Основы философии",
                         timeMap.getValue(4),
                         4,
                         daysOfWeek()[2]
                 ),
-                TimeTableItem(id++,
+                ScheduleItem(id++,
                         "Физическая культура",
                         timeMap.getValue(5),
                         5,
                         daysOfWeek()[2]
                 ),
 
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка программных модулей",
                         timeMap.getValue(1),
                         1,
                         daysOfWeek()[3]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка программных модулей",
                         timeMap.getValue(2),
                         2,
                         daysOfWeek()[3]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Системное программирование",
                         timeMap.getValue(3),
@@ -74,21 +73,21 @@ fun timeTableList(resources: Resources): List<TimeTableItem> {
                         daysOfWeek()[3]
                 ),
 
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Стандартизация, сертификация и техническое документоведение",
                         timeMap.getValue(2),
                         2,
                         daysOfWeek()[4]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка мобильных приложений",
                         timeMap.getValue(3),
                         3,
                         daysOfWeek()[4]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка мобильных приложений",
                         timeMap.getValue(4),
@@ -96,21 +95,21 @@ fun timeTableList(resources: Resources): List<TimeTableItem> {
                         daysOfWeek()[4]
                 ),
 
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Системное программирование",
                         timeMap.getValue(1),
                         1,
                         daysOfWeek()[5]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Технология разработки программного обеспечения",
                         timeMap.getValue(2),
                         2,
                         daysOfWeek()[5]
                 ),
-                TimeTableItem(
+                ScheduleItem(
                         id++,
                         "Разработка мобильных приложений",
                         timeMap.getValue(3),
@@ -122,6 +121,20 @@ fun timeTableList(resources: Resources): List<TimeTableItem> {
 
 fun daysOfWeek() : List<String> {
         return listOf("Пн","Вт","Ср","Чт","Пт","Сб")
+}
+
+fun subjectsList(resources: Resources): List<Subject> {
+        var id: Long = 0
+        return mutableListOf(
+                Subject(id, "Стандартизация, сертификация и техническое документоведение"),
+                Subject(id++, "Иностранный язык в проф деятельности"),
+                Subject(id++, "Разработка мобильных приложений"),
+                Subject(id++, "Основы философии"),
+                Subject(id++, "Разработка программных модулей"),
+                Subject(id++, "Системное программирование"),
+                Subject(id++, "Физкультура"),
+                Subject(id++, "Технология разработки программного обеспечения")
+        )
 }
 
 val timeMap =  mapOf(

@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Timetable manager</string>
+
+    <string name="add_item_fab_text">Add item</string>
+
     <!--menus options-->
     <string name="edit_option">Изменить</string>
     <string name="delete_option">Удалить</string>
     <string name="disable_option">Выключить</string>
     <string name="subject_list_option">Список предметов</string>
-    <string name="bell_schedule_option">Расписание звонков</string>
+    <string name="lesson_time_option">Расписание звонков</string>
+    <string name="schedule_option">Расписание</string>
 
-    <string name="timetable_page_title">Расписание</string>
-    <string name="monday_tab_option">Пн</string>
-    <string name="tuesday_tab_option">Вт</string>
-    <string name="wednesday_tab_option">Ср</string>
-    <string name="thursday_tab_option">Чт</string>
-    <string name="friday_tab_option">Пт</string>
-    <string name="saturday_tab_option">Сб</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_item_fab_text">Add item</string>
+<!--page titles-->
+    <string name="schedule_page_title">Расписание</string>
+    <string name="time_table_page_title">Расписание звонков</string>
+    <string name="subjects_page_title">Предметы</string>
+
 
 </resources>

@@ -1,26 +1,20 @@
 package com.example.affirmations.schedule
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
-import com.example.affirmations.adapter.TimeTableAdapter
-import com.example.affirmations.data.DaysOfWeek
-import com.example.affirmations.data.TimeTableItem
-import com.example.affirmations.data.daysOfWeek
+import com.example.affirmations.adapter.ScheduleAdapter
+import com.example.affirmations.model.ScheduleItem
 import com.example.affirmations.databinding.FragmentScheduleBinding
-import com.google.android.material.tabs.TabLayout
 
-private const val TAG = "ScheduleFragmentdebug"
+private const val TAG = "ScheduleFragment"
 const val ARG_OBJECT = "object"
 class ScheduleFragment : Fragment() {
 
@@ -28,8 +22,8 @@ class ScheduleFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var dayOfWeek: String
 
-    private val timeTableListViewModel by viewModels<TimeTableListViewModel> {
-        TimeTableListViewModelFactory (requireContext())
+    private val scheduleViewModel by viewModels<ScheduleViewModel> {
+        ScheduleViewModelFactory (requireContext())
     }
 
     override fun onCreateView(
@@ -53,18 +47,18 @@ class ScheduleFragment : Fragment() {
         }
 
         //Recycler view and data
-        val timeTableAdapter = TimeTableAdapter(
+        val scheduleAdapter = ScheduleAdapter(
             context = requireContext()
         ) { itemView -> adapterOnLongClick(itemView) }
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.adapter = timeTableAdapter
+        recyclerView.adapter = scheduleAdapter
 
-        timeTableListViewModel.timeTableLiveData.observe(requireActivity()) {
-            it?.let { timeTableList ->
-                timeTableAdapter.submitList(
-                    timeTableList.filter { item -> item.dayOfWeek == dayOfWeek }
-                            as MutableList<TimeTableItem>
+        scheduleViewModel.scheduleLiveData.observe(requireActivity()) {
+            it?.let { scheuleList ->
+                scheduleAdapter.submitList(
+                    scheuleList.filter { item -> item.dayOfWeek == dayOfWeek }
+                            as MutableList<ScheduleItem>
                 )
             }
         }

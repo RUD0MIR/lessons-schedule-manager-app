@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:id="@+id/edit"
+        <item android:id="@+id/subjects_option"
             android:title="@string/subject_list_option" />
-        <item android:id="@+id/delete"
-            android:title="@string/bell_schedule_option" />
+        <item android:id="@+id/time_table_option"
+            android:title="@string/lesson_time_option" />
 </menu>

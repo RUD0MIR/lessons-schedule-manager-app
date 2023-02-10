@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp"
+    android:longClickable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/subject_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAlignment="textStart"
+        tools:text="Предмет 1"
+        android:layout_margin="16dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        />
+</LinearLayout>

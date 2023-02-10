@@ -15,8 +15,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    
-    buildFeatures {
+        buildFeatures {
         viewBinding = true
     }
 
@@ -54,5 +53,4 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.liveDataVersion"
     //ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-
 }

@@ -34,4 +34,5 @@ ext {
     constraintLayoutVersion = '2.0.4'
     activityVersion = '1.1.0'
     fragment_version = "1.5.5"
+    nav_version = "2.5.3"
 }
