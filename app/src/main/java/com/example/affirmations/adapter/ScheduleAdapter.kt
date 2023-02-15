@@ -14,7 +14,7 @@ import com.example.affirmations.model.ScheduleItem
 
 class ScheduleAdapter(
     private val context: Context,
-    private val onItemLongClick: (View) -> Unit
+    private val onItemLongClick: (View) -> Unit,
 ) : ListAdapter<ScheduleItem, ScheduleAdapter.ScheduleViewHolder>(ScheduleDiffCallback) {
 
     class ScheduleViewHolder
@@ -47,9 +47,24 @@ class ScheduleAdapter(
 
     }
 
+    override fun getItemViewType(position: Int): Int {
+        if(getItem(position).isDisable) return 1
+        return 0
+    }
+
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ScheduleViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.schedule_list_item, viewGroup, false)
+//        val view = LayoutInflater.from(viewGroup.context)
+//            .inflate(R.layout.schedule_list_item, viewGroup, false)
+        val view  = when(viewType) {
+            1 -> {
+                LayoutInflater.from(viewGroup.context)
+                    .inflate(R.layout.disbled_schedule_list_item, viewGroup, false)
+            }
+            else -> LayoutInflater.from(viewGroup.context)
+                .inflate(R.layout.schedule_list_item, viewGroup, false)
+        }
+
+
 
         return ScheduleViewHolder(view, context, onItemLongClick)
     }
@@ -57,8 +72,6 @@ class ScheduleAdapter(
     override fun onBindViewHolder(viewHolder: ScheduleViewHolder, position: Int) {
         val scheduleItem = getItem(position)
         viewHolder.bind(scheduleItem)
-
-
     }
 
     object ScheduleDiffCallback : DiffUtil.ItemCallback<ScheduleItem>() {

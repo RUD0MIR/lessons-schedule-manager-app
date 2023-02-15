@@ -1,27 +1,30 @@
 package com.example.affirmations.data
 
 import android.content.res.Resources
+import com.example.affirmations.R
 import com.example.affirmations.model.Subject
 import com.example.affirmations.model.ScheduleItem
+import com.example.affirmations.model.TimeTableItem
+import kotlin.random.Random
 
 fun scheduleList(resources: Resources): List<ScheduleItem> {
     var id: Long = 1
-    //TODO: Extract time of classes into class
-    //TODO: Remove days of week
         return mutableListOf(
                 ScheduleItem(
                         id,
                         "Разработка программных модулей",
                         timeMap.getValue(3),
                         3,
-                        daysOfWeek()[0]
+                        daysOfWeek()[0],
+                        true
                 ),
                 ScheduleItem(
                         id++,
                         "Стандартизация, сертификация и техническое документоведение",
                         timeMap.getValue(4),
                         4,
-                        daysOfWeek()[0]
+                        daysOfWeek()[0],
+                        true
                 ),
                 ScheduleItem(
                         id++,
@@ -136,6 +139,20 @@ fun subjectsList(resources: Resources): List<Subject> {
                 Subject(id++, "Технология разработки программного обеспечения")
         )
 }
+//temp
+fun subjectArray(): Array<Subject> {
+        var id: Long = 0
+        return arrayOf(
+                Subject(id, "Стандартизация, сертификация и техническое документоведение"),
+                Subject(id++, "Иностранный язык в проф деятельности"),
+                Subject(id++, "Разработка мобильных приложений"),
+                Subject(id++, "Основы философии"),
+                Subject(id++, "Разработка программных модулей"),
+                Subject(id++, "Системное программирование"),
+                Subject(id++, "Физкультура"),
+                Subject(id++, "Технология разработки программного обеспечения")
+        )
+}
 
 val timeMap =  mapOf(
         Pair(1, "8:00-9:30"),
@@ -145,3 +162,38 @@ val timeMap =  mapOf(
         Pair(5, "15:00-16:30"),
         Pair(6, "16:40-18:10")
 )
+
+fun timeTableList(resources: Resources): List<TimeTableItem> {
+        return mutableListOf(
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "1 урок",
+                        lessonTime = "08:00-09:40"
+                ),
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "2 урок",
+                        lessonTime = "09:40-11:10",
+                ),
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "3 урок",
+                        lessonTime = "11:20-12:50",
+                ),
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "4 урок",
+                        lessonTime = "13:20-14:50",
+                ),
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "5 урок",
+                        lessonTime = "15:00-16:30",
+                ),
+                TimeTableItem(
+                        id = Random.nextLong(),
+                        lessonNumber = "6 урок",
+                        lessonTime = "16:40-18:10",
+                )
+        )
+}

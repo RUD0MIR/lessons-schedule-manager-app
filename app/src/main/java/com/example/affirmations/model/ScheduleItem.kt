@@ -6,5 +6,6 @@ data class ScheduleItem(
         val subject: String,
         val time: String,
         val number: Int,
-        val dayOfWeek: String
+        val dayOfWeek: String,
+        val isDisable: Boolean = false
 )

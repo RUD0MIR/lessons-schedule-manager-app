@@ -19,6 +19,7 @@
             app:titleCentered="true"
             app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_app_bar_menu"
+            android:background="@color/blue"
             />
     </com.google.android.material.appbar.AppBarLayout>
     <com.google.android.material.tabs.TabLayout
@@ -27,37 +28,11 @@
         android:layout_height="wrap_content"
         app:tabIndicatorColor="@color/orange"
         app:tabSelectedTextColor="@color/orange">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
     </com.google.android.material.tabs.TabLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/schedule_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </androidx.viewpager2.widget.ViewPager2>
-
-
 </LinearLayout>

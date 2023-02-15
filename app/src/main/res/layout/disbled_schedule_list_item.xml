@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
-    android:focusable="true"
+    android:clickable="false"
+    android:focusable="false"
+    android:longClickable="false"
     android:orientation="horizontal"
     android:paddingVertical="4dp"
-    android:longClickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@color/color_on_surface_opacity_0.12">
 
     <TextView
         android:id="@+id/timetb_number"
@@ -20,6 +21,8 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="16dp"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+
+        android:textColor="@color/color_on_surface_opacity_0.38"
         />
 
     <LinearLayout
@@ -33,6 +36,8 @@
             android:layout_height="wrap_content"
             tools:text="Разработка мобильных приложений"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+
+            android:textColor="@color/color_on_surface_opacity_0.38"
             />
 
         <TextView
@@ -41,7 +46,7 @@
             android:layout_height="wrap_content"
             tools:text="10:10-13:20"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-            android:textColor="@color/gray"
+            android:textColor="@color/color_on_surface_opacity_0.38"
             />
     </LinearLayout>
 </LinearLayout>

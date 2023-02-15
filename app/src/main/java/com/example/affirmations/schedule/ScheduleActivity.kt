@@ -17,6 +17,7 @@
 package com.example.affirmations.schedule
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuInflater
@@ -25,6 +26,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.MenuRes
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.affirmations.R
@@ -33,8 +35,10 @@ import com.example.affirmations.time_table.TimeTableActivity
 import com.example.affirmations.data.daysOfWeek
 import com.example.affirmations.databinding.ActivityScheduleBinding
 import com.example.affirmations.subjects.SubjectsActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.time.LocalDate
 import java.util.*
 
 
@@ -54,6 +58,7 @@ class ScheduleActivity : FragmentActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScheduleBinding.inflate(layoutInflater)
@@ -72,15 +77,22 @@ class ScheduleActivity : FragmentActivity() {
 
         tabLayout = binding.weekTabLayout
 
-        val calendar: Calendar = Calendar.getInstance()
-        val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = daysOfWeek()[position]
-            tabLayout.getTabAt(currentDayOfWeek - 2)?.select()
         }.attach()
+        selectTabForCurrentDayOfWeek(tabLayout)
 
 
+    }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun selectTabForCurrentDayOfWeek(tabLayout: TabLayout) {
+        val currentDayOfWeek = LocalDate.now().dayOfWeek.value
+        tabLayout.getTabAt(currentDayOfWeek - 1)?.select()
     }
 
     override fun onCreateContextMenu(
@@ -92,6 +104,8 @@ class ScheduleActivity : FragmentActivity() {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.schedule_app_bar_menu, menu)
     }
+
+
 
     private fun showAppBarMenu(view: View, @MenuRes menuRes: Int) {
         val menu = PopupMenu(this@ScheduleActivity, view)

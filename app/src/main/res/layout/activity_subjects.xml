@@ -21,6 +21,7 @@
             app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="@color/white"
+            android:background="@color/blue"
             />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,12 +30,12 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_item_fab"
+            android:id="@+id/add_subject_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            style="@style/Widget.Material3.FloatingActionButton.Primary"
+            style="@style/Widget.Material3.FloatingActionButton.Secondary"
             android:contentDescription="@string/add_item_fab_text"
             app:srcCompat="@drawable/ic_add" />
 
