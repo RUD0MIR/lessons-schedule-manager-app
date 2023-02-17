@@ -1,10 +1,14 @@
 package com.example.affirmations.schedule
 
+import android.icu.text.Transliterator.Position
 import android.os.Bundle
+import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
@@ -15,6 +19,7 @@ import com.example.affirmations.adapter.ScheduleAdapter
 import com.example.affirmations.databinding.ScheduleDialogItemBinding
 import com.example.affirmations.model.ScheduleItem
 import com.example.affirmations.databinding.FragmentScheduleBinding
+import com.example.affirmations.model.TimeTableItem
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 private const val TAG = "ScheduleFragment"
@@ -28,7 +33,7 @@ class ScheduleFragment : Fragment() {
     private val addDialogBinding get() = _addDialogBinding!!
 
     private lateinit var dayOfWeek: String
-
+    private lateinit var scheduleAdapter: ScheduleAdapter
 
     private val scheduleViewModel by viewModels<ScheduleViewModel> {
         ScheduleViewModelFactory (requireContext())
@@ -42,31 +47,27 @@ class ScheduleFragment : Fragment() {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
         _addDialogBinding = ScheduleDialogItemBinding.inflate(inflater, container, false)
         return binding.root
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //taking arguments from pager adapter
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            //NULL POINTER?
             dayOfWeek = getString(ARG_OBJECT)!!
         }
 
         //Recycler view and data
-        val scheduleAdapter = ScheduleAdapter(
+        scheduleAdapter = ScheduleAdapter(
             context = requireContext(),
-        ) { itemView -> adapterOnLongClick(itemView) }
+        ) { itemView, scheduleItem, position -> adapterOnLongClick(itemView, scheduleItem, position) }
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = scheduleAdapter
 
         scheduleViewModel.scheduleLiveData.observe(requireActivity()) {
-            it?.let { scheuleList ->
+            it?.let { scheduleList ->
                 scheduleAdapter.submitList(
-                    scheuleList.filter { item -> item.dayOfWeek == dayOfWeek }
+                    scheduleList.filter { item -> item.dayOfWeek == dayOfWeek }
                             as MutableList<ScheduleItem>
                 )
             }
@@ -78,7 +79,7 @@ class ScheduleFragment : Fragment() {
     }
 
 
-
+    //TODO:not for db
     private fun showAddScheduleItemDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(R.string.add_schedule_item_dialog_title))
@@ -86,11 +87,22 @@ class ScheduleFragment : Fragment() {
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.add_option)) { _, _ ->
                 //TODO:save new item
+                val subject = addDialogBinding.subjectExposedMenu.text.toString()
+                val lessonTime = addDialogBinding.lessonTimeExposedMenu.text.toString()
+                scheduleViewModel.insertScheduleItem(
+                    subject,
+                    lessonTime,
+                    6,
+                    dayOfWeek,
+                )
+
+                scheduleAdapter.notifyDataSetChanged()
             }
             .show()
     }
 
-    private fun showEditScheduleItemDialog() {
+    //TODO:not for db
+    private fun showEditScheduleItemDialog(scheduleItem: ScheduleItem, position: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(R.string.edit_schedule_item_dialog_title))
             .setView(R.layout.schedule_dialog_item)
@@ -101,54 +113,56 @@ class ScheduleFragment : Fragment() {
             .show()
     }
 
-    private fun showDeleteScheduleItemDialog() {
+    //TODO:not for db
+    private fun showDeleteScheduleItemDialog(scheduleItem: ScheduleItem, position: Int) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(resources.getString(R.string.delete_schedule_item_dialog_title))
+            .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
-                //TODO:save new item
+                scheduleViewModel.dataSource.removeScheduleItem(scheduleItem)
+                scheduleAdapter.notifyItemChanged(position)
             }
             .show()
     }
 
-    private fun disableItem() {
-        //TODO: set item to disable state
+    private fun adapterOnLongClick(view: View, scheduleItem: ScheduleItem, position: Int) {
+        showContextMenu(view, R.menu.list_item_menu, scheduleItem, position)
     }
-
-    private fun adapterOnLongClick(view: View) {
-        showContextMenu(view, R.menu.list_item_menu)
-    }
-
-    private fun showContextMenu(v: View, @MenuRes menuRes: Int) {
+    
+    //TODO:not for db
+    private fun showContextMenu(
+        v: View,
+        @MenuRes menuRes: Int,
+        scheduleItem: ScheduleItem,
+        position: Int) {
         val popup = PopupMenu(context, v)
+
         popup.menuInflater.inflate(menuRes, popup.menu)
         popup.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.edit_option -> {
-                    showEditScheduleItemDialog()
+                    showEditScheduleItemDialog(scheduleItem, position)
                     true
                 }
                 R.id.delete_option -> {
-                    showDeleteScheduleItemDialog()
+                    showDeleteScheduleItemDialog(scheduleItem, position)
                     true
                 }
                 R.id.disable_option -> {
-                    disableItem()
+
+                    scheduleItem.isDisable = !scheduleItem.isDisable
+                    scheduleAdapter.notifyItemChanged(position)
                     true
                 }
                 else -> {
                     Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
                     true
                 }
-
             }
         }
 
         popup.show()
     }
-
-
-
 }
 
 

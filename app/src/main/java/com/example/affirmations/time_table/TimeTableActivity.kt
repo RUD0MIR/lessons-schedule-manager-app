@@ -1,28 +1,24 @@
 package com.example.affirmations.time_table
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.text.format.DateFormat
-import android.text.format.DateFormat.is24HourFormat
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
-import com.example.affirmations.adapter.SubjectsAdapter
 import com.example.affirmations.adapter.TimeTableAdapter
-import com.example.affirmations.data.timeTableList
-import com.example.affirmations.databinding.ActivitySubjectsBinding
 import com.example.affirmations.databinding.ActivityTimeTableBinding
-import com.example.affirmations.model.Subject
+import com.example.affirmations.databinding.TimeTableDialogItemBinding
 import com.example.affirmations.model.TimeTableItem
-import com.example.affirmations.subjects.SubjectViewModelFactory
-import com.example.affirmations.subjects.SubjectsViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+
 
 private const val TAG = "TimeTableActivity"
 
@@ -36,17 +32,30 @@ class TimeTableActivity : FragmentActivity() {
     }
 
     private lateinit var binding: ActivityTimeTableBinding
+    private lateinit var dialogItemBinding: TimeTableDialogItemBinding
+    private lateinit var timeTableAdapter: TimeTableAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTimeTableBinding.inflate(layoutInflater)
+        dialogItemBinding = TimeTableDialogItemBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        //input block
+        val filter =
+            InputFilter { source, start, end, dest, dstart, dend ->
+                    if (source[0].digitToInt() > 2) {
+                        return@InputFilter ""
+                }
+                null
+            }
+        dialogItemBinding.hourTf.editText?.filters = arrayOf(filter)
+
         //Recycler view and data
-        val timeTableAdapter = TimeTableAdapter(
+        timeTableAdapter = TimeTableAdapter(
             context = context
-        ) { itemView -> adapterOnLongClick(itemView) }
+        ) { itemView, timeTableItem, position -> adapterOnLongClick(itemView, timeTableItem, position) }
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = timeTableAdapter
@@ -67,13 +76,32 @@ class TimeTableActivity : FragmentActivity() {
 
         //mmmmmmmmmm time picker
         binding.addTimetblFab.setOnClickListener {
-            showTimePicker()
+            showAddTimePicker()
         }
 
     }
 
-    private fun showTimePicker() {
-        val isSystem24Hour = is24HourFormat(context)
+
+    //TODO:not for db
+    private fun showEditTimePicker() {
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+        val picker =
+            MaterialTimePicker.Builder()
+                .setTheme(R.style.timePickerTheme)
+                .setTimeFormat(clockFormat)
+                .setTitleText(getString(R.string.edit_time_table_item_dialog_title))
+                .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
+                .setPositiveButtonText(getString(R.string.save_option))
+                .setNegativeButtonText(getString(R.string.cancel_option))
+                .build()
+        picker.show(supportFragmentManager, "tag")
+    }
+
+    //TODO:not for db
+    private fun showAddTimePicker() {
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
         val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
         val picker =
@@ -85,26 +113,50 @@ class TimeTableActivity : FragmentActivity() {
                 .setPositiveButtonText(getString(R.string.add_option))
                 .setNegativeButtonText(getString(R.string.cancel_option))
                 .build()
-
         picker.show(supportFragmentManager, "tag")
     }
 
-
-
-
-
-    private fun adapterOnLongClick(view: View) {
-        showContextMenu(view, R.menu.list_item_menu)
+    //TODO:not for db
+    private fun showDeleteTimeTableItemDialog(timeTableItem: TimeTableItem, position: Int) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
+            .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
+                timeTableViewModel.dataSource.removeTimeTableItem(timeTableItem)
+                timeTableAdapter.notifyItemChanged(position)
+            }
+            .show()
     }
 
-    private fun showContextMenu(v: View, @MenuRes menuRes: Int) {
+    private fun adapterOnLongClick(view: View, timeTableItem: TimeTableItem, position: Int) {
+        showContextMenu(view, R.menu.edit_delete_menu, timeTableItem, position)
+    }
+
+    private fun showContextMenu(
+        v: View,
+        @MenuRes menuRes: Int,
+        timeTableItem: TimeTableItem,
+        position: Int
+    ) {
         val popup = PopupMenu(context, v)
         popup.menuInflater.inflate(menuRes, popup.menu)
 
-        popup.setOnMenuItemClickListener {
-            TODO("menuItem: MenuItem ->")
+        popup.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.edit_option -> {
+                    showEditTimePicker()
+                    true
+                }
+                R.id.delete_option -> {
+                    showDeleteTimeTableItemDialog(timeTableItem, position)
+                    true
+                }
+                else -> {
+                    Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+                    true
+                }
+            }
         }
-
         popup.show()
     }
 }

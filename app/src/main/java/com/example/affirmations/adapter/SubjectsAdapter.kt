@@ -9,26 +9,29 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
+import com.example.affirmations.model.ScheduleItem
 import com.example.affirmations.model.Subject
 
 class SubjectsAdapter (
     private val context: Context,
-    private val onItemLongClick: (View) -> Unit
+    private val onItemLongClick: (View, Subject, Int) -> Unit
 ) : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>(SubjectsDiffCallback) {
 
     class SubjectsViewHolder
         (
         view: View,
         val context: Context,
-        val onItemLongClick: (View) -> Unit
+        private val onItemLongClick: (View, Subject, Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val subjectNameTv: TextView = itemView.findViewById(R.id.subject_text)
         private var currentSubject: Subject? = null
 
         init {
-            itemView.setOnLongClickListener{
-                onItemLongClick(it)
+            itemView.setOnLongClickListener{ view ->
+                currentSubject?.let { subject ->
+                    onItemLongClick(view, subject, absoluteAdapterPosition)
+                }
                 return@setOnLongClickListener true
             }
         }
@@ -38,13 +41,11 @@ class SubjectsAdapter (
             currentSubject = subject
             subjectNameTv.text = subject.name
         }
-
-
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): SubjectsViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.subject_list_item, viewGroup, false)
+        val view  = LayoutInflater.from(viewGroup.context)
+                .inflate(R.layout.subject_list_item, viewGroup, false)
 
         return SubjectsViewHolder(view, context, onItemLongClick)
     }

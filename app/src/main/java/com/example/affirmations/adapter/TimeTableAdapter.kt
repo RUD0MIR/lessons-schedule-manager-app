@@ -9,18 +9,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
+import com.example.affirmations.model.Subject
 import com.example.affirmations.model.TimeTableItem
 
 class TimeTableAdapter (
     private val context: Context,
-    private val onItemLongClick: (View) -> Unit
+    private val onItemLongClick: (View, TimeTableItem, Int) -> Unit
 ) : ListAdapter<TimeTableItem, TimeTableAdapter.TimeTableViewHolder>(TimeTableDiffCallback) {
 
     class TimeTableViewHolder
         (
         view: View,
         val context: Context,
-        val onItemLongClick: (View) -> Unit
+        private val onItemLongClick: (View, TimeTableItem, Int) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val lessonTimeTv: TextView = itemView.findViewById(R.id.lesson_time_tv)
@@ -28,8 +29,10 @@ class TimeTableAdapter (
         private var currentTimeTableItem: TimeTableItem? = null
 
         init {
-            itemView.setOnLongClickListener{
-                onItemLongClick(it)
+            itemView.setOnLongClickListener{ listItem ->
+                currentTimeTableItem?.let { timeTableItem ->
+                    onItemLongClick(listItem, timeTableItem, absoluteAdapterPosition)
+                }
                 return@setOnLongClickListener true
             }
         }

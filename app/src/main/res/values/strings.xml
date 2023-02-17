@@ -7,21 +7,20 @@
     <!--menus options-->
     <string name="edit_option">Изменить</string>
     <string name="delete_option">Удалить</string>
-    <string name="disable_option">Выключить</string>
+    <string name="disable_option">Включить/выключить</string>
     <string name="subject_list_option">Список предметов</string>
     <string name="lesson_time_option">Расписание звонков</string>
     <string name="schedule_option">Расписание</string>
     <string name="add_option">Добавить</string>
+    <string name="save_option">Сохранить</string>
+    <string name="cancel_option">Отмена</string>
 
     <!--page titles-->
     <string name="schedule_page_title">Расписание</string>
     <string name="time_table_page_title">Расписание звонков</string>
     <string name="subjects_page_title">Предметы</string>
 
-    <string name="time_sample">%1$s:%2$s-%3$s:%4$s</string>
-
-    <string name="save_option">Сохранить</string>
-    <string name="cancel_option">Отмена</string>
+    <string name="time_sample">%1$s:%2$s</string>
 
     <string name="subjects_name">Название предмета</string>
     <string name="subject_name_hint">Название предмета</string>
@@ -34,13 +33,18 @@
         <item>item1</item>
     </array>
 <!-- dialog titles-->
-    <string name="add_time_table_item_dialog_title">Добавление времени урока</string>
+
 
     <string name="add_schedule_item_dialog_title">Добавление урока</string>
     <string name="edit_schedule_item_dialog_title">Изменение урока</string>
-    <string name="delete_schedule_item_dialog_title">Удалить урок?</string>
+    <string name="delete_lesson_dialog_title">Удалить урок?</string>
 
     <string name="add_subject_title">Добавление предмета</string>
+    <string name="edit_subject_dialog_title">Изменение предмета</string>
+    <string name="delete_subject_dialog_title">Удалить предмет?</string>
+
+    <string name="add_time_table_item_dialog_title">Добавление времени урока</string>
+    <string name="edit_time_table_item_dialog_title">Изменение времени урока</string>
 
 
 </resources>

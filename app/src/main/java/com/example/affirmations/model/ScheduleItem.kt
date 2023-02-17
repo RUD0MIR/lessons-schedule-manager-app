@@ -3,9 +3,9 @@ package com.example.affirmations.model
 
 data class ScheduleItem(
         val id: Long,
-        val subject: String,
-        val time: String,
-        val number: Int,
-        val dayOfWeek: String,
-        val isDisable: Boolean = false
+        var subject: String,
+        var time: String,
+        var number: Int,
+        var dayOfWeek: String,
+        var isDisable: Boolean = false
 )
