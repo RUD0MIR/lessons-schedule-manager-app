@@ -41,8 +41,8 @@ class ScheduleAdapter(
 
         fun bind(scheduleItem: ScheduleItem) {
             currentScheduleItem = scheduleItem
-            subjectTv.text = scheduleItem.subject
-            timeTv.text = scheduleItem.time
+            subjectTv.text = scheduleItem.subjectName
+            timeTv.text = scheduleItem.lessonTime
             numberTv.text = scheduleItem.number.toString()
         }
 

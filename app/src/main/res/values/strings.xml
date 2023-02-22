@@ -3,6 +3,7 @@
     <string name="app_name">Timetable manager</string>
 
     <string name="add_item_fab_text">Add item</string>
+    <string name="empty_input_error_message">Заполните поле</string>
 
     <!--menus options-->
     <string name="edit_option">Изменить</string>
@@ -26,15 +27,7 @@
     <string name="subject_name_hint">Название предмета</string>
     <string name="lesson_time_hint">Время урока</string>
 
-    <array name="exposed_menu_items">
-        <item>item1</item>
-        <item>item1</item>
-        <item>item1</item>
-        <item>item1</item>
-    </array>
 <!-- dialog titles-->
-
-
     <string name="add_schedule_item_dialog_title">Добавление урока</string>
     <string name="edit_schedule_item_dialog_title">Изменение урока</string>
     <string name="delete_lesson_dialog_title">Удалить урок?</string>

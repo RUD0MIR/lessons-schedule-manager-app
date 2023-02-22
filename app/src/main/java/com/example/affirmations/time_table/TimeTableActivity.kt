@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
 import com.example.affirmations.adapter.TimeTableAdapter
@@ -27,13 +29,11 @@ class TimeTableActivity : FragmentActivity() {
     private val context = this@TimeTableActivity
     private val fragmentManager = FragmentActivity().supportFragmentManager
 
-    private val timeTableViewModel by viewModels<TimeTableViewModel> {
-        TimeTableViewModelFactory (context)
-    }
 
     private lateinit var binding: ActivityTimeTableBinding
     private lateinit var dialogItemBinding: TimeTableDialogItemBinding
     private lateinit var timeTableAdapter: TimeTableAdapter
+    private lateinit var timeTableViewModel: TimeTableViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +41,6 @@ class TimeTableActivity : FragmentActivity() {
         dialogItemBinding = TimeTableDialogItemBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        //input block
-        val filter =
-            InputFilter { source, start, end, dest, dstart, dend ->
-                    if (source[0].digitToInt() > 2) {
-                        return@InputFilter ""
-                }
-                null
-            }
-        dialogItemBinding.hourTf.editText?.filters = arrayOf(filter)
 
         //Recycler view and data
         timeTableAdapter = TimeTableAdapter(
@@ -60,13 +50,10 @@ class TimeTableActivity : FragmentActivity() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = timeTableAdapter
 
-        timeTableViewModel.timeTableLiveData.observe(context) {
-            it?.let { timeTableList ->
-                timeTableAdapter.submitList(
-                    timeTableList as MutableList<TimeTableItem>
-                )
-            }
-        }
+        timeTableViewModel = ViewModelProvider(context)[TimeTableViewModel::class.java]
+        timeTableViewModel.readTimeTableData.observe(context, Observer { timeTableItems ->
+            timeTableAdapter.submitList(timeTableItems)
+        })
 
         //listener for app bar menu
         binding.topAppBar.setNavigationOnClickListener {
@@ -89,7 +76,7 @@ class TimeTableActivity : FragmentActivity() {
 
         val picker =
             MaterialTimePicker.Builder()
-                .setTheme(R.style.timePickerTheme)
+//                .setTheme(R.style.timePickerTheme)
                 .setTimeFormat(clockFormat)
                 .setTitleText(getString(R.string.edit_time_table_item_dialog_title))
                 .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
@@ -106,7 +93,7 @@ class TimeTableActivity : FragmentActivity() {
 
         val picker =
             MaterialTimePicker.Builder()
-                .setTheme(R.style.timePickerTheme)
+//                .setTheme(R.style.timePickerTheme)
                 .setTimeFormat(clockFormat)
                 .setTitleText(getString(R.string.add_time_table_item_dialog_title))
                 .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
@@ -122,8 +109,8 @@ class TimeTableActivity : FragmentActivity() {
             .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
-                timeTableViewModel.dataSource.removeTimeTableItem(timeTableItem)
-                timeTableAdapter.notifyItemChanged(position)
+//                timeTableViewModel.dataSource.removeTimeTableItem(timeTableItem)
+//                timeTableAdapter.notifyItemChanged(position)
             }
             .show()
     }

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            app:simpleItems="@array/exposed_menu_items"
+            android:labelFor="@id/subject_exposed_menu"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -37,6 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
-            app:simpleItems="@array/exposed_menu_items"/>
+            android:labelFor="@+id/lesson_time_exposed_menu"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

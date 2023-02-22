@@ -1,25 +1,27 @@
 package com.example.affirmations.schedule
 
-import android.icu.text.Transliterator.Position
 import android.os.Bundle
-import android.view.ContextMenu
+import android.text.Editable
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
 import com.example.affirmations.adapter.ScheduleAdapter
 import com.example.affirmations.databinding.ScheduleDialogItemBinding
 import com.example.affirmations.model.ScheduleItem
 import com.example.affirmations.databinding.FragmentScheduleBinding
-import com.example.affirmations.model.TimeTableItem
+import com.example.affirmations.model.Subject
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 private const val TAG = "ScheduleFragment"
@@ -34,10 +36,7 @@ class ScheduleFragment : Fragment() {
 
     private lateinit var dayOfWeek: String
     private lateinit var scheduleAdapter: ScheduleAdapter
-
-    private val scheduleViewModel by viewModels<ScheduleViewModel> {
-        ScheduleViewModelFactory (requireContext())
-    }
+    private lateinit var scheduleViewModel: ScheduleViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +55,9 @@ class ScheduleFragment : Fragment() {
             dayOfWeek = getString(ARG_OBJECT)!!
         }
 
-        //Recycler view and data
+
+
+        //Recycler view
         scheduleAdapter = ScheduleAdapter(
             context = requireContext(),
         ) { itemView, scheduleItem, position -> adapterOnLongClick(itemView, scheduleItem, position) }
@@ -64,42 +65,56 @@ class ScheduleFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = scheduleAdapter
 
-        scheduleViewModel.scheduleLiveData.observe(requireActivity()) {
-            it?.let { scheduleList ->
-                scheduleAdapter.submitList(
-                    scheduleList.filter { item -> item.dayOfWeek == dayOfWeek }
-                            as MutableList<ScheduleItem>
-                )
-            }
-        }
+        //initializing view model and getting schedule data
+        scheduleViewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
+        scheduleViewModel.readScheduleData.observe(viewLifecycleOwner, Observer { scheduleItems ->
+            scheduleAdapter.submitList(scheduleItems)
+        })
 
+        scheduleViewModel.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
+            val adapter = ArrayAdapter(requireContext(), R.layout.schedule_list_item, subjectNames)
+            (addDialogBinding.addScheduleItemTf.editText?.text as? AutoCompleteTextView)?.setAdapter(adapter)
+        })
+
+        //fab click listener
         binding.addScheduleItemFab.setOnClickListener {
             showAddScheduleItemDialog()
         }
     }
 
-
-    //TODO:not for db
     private fun showAddScheduleItemDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(R.string.add_schedule_item_dialog_title))
             .setView(R.layout.schedule_dialog_item)
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.add_option)) { _, _ ->
-                //TODO:save new item
-                val subject = addDialogBinding.subjectExposedMenu.text.toString()
-                val lessonTime = addDialogBinding.lessonTimeExposedMenu.text.toString()
-                scheduleViewModel.insertScheduleItem(
-                    subject,
-                    lessonTime,
-                    6,
-                    dayOfWeek,
-                )
 
-                scheduleAdapter.notifyDataSetChanged()
+                insertDataToDatabase()
+                scheduleAdapter.notifyDataSetChanged()//TODO: use correct notifySetChanged
             }
             .show()
     }
+
+    private fun insertDataToDatabase() {
+        val subject = addDialogBinding.subjectExposedMenu.text.toString()
+        val lessonTime = addDialogBinding.lessonTimeExposedMenu.text.toString()
+
+        if(inputCheck(subject, lessonTime)){
+            val scheduleItem = ScheduleItem(
+                0,
+                subject,
+                lessonTime,
+                1,//TODO: display correct number
+                dayOfWeek
+            )
+            // Add Data to Database
+            scheduleViewModel.addScheduleItem(scheduleItem)
+        }else{
+            Toast.makeText(requireContext(), subject + lessonTime, Toast.LENGTH_LONG).show()//Please fill out all fields.
+        }
+    }
+
+
 
     //TODO:not for db
     private fun showEditScheduleItemDialog(scheduleItem: ScheduleItem, position: Int) {
@@ -119,14 +134,18 @@ class ScheduleFragment : Fragment() {
             .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
-                scheduleViewModel.dataSource.removeScheduleItem(scheduleItem)
-                scheduleAdapter.notifyItemChanged(position)
+                scheduleViewModel.deleteScheduleItem(scheduleItem)
+                scheduleAdapter.notifyItemRemoved(position)
             }
             .show()
     }
 
     private fun adapterOnLongClick(view: View, scheduleItem: ScheduleItem, position: Int) {
         showContextMenu(view, R.menu.list_item_menu, scheduleItem, position)
+    }
+
+    private fun inputCheck(subject: String, lessonTime: String): Boolean{
+        return !(TextUtils.isEmpty(subject) && TextUtils.isEmpty(lessonTime))
     }
     
     //TODO:not for db

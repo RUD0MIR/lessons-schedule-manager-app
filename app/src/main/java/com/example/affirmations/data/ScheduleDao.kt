@@ -1,0 +1,55 @@
+package com.example.affirmations.data
+
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import com.example.affirmations.model.ScheduleItem
+import com.example.affirmations.model.Subject
+import com.example.affirmations.model.TimeTableItem
+
+
+@Dao
+interface ScheduleDao {
+
+    //schedule items queries
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addScheduleItem(scheduleItem: ScheduleItem)
+
+    @Update
+    suspend fun updateScheduleItem(scheduleItem: ScheduleItem)
+
+    @Delete
+    suspend fun deleteScheduleItem(scheduleItem: ScheduleItem)
+
+    @Query("SELECT * FROM schedule_item ORDER BY id ASC")
+    fun readScheduleData(): LiveData<List<ScheduleItem>>
+
+    //subjects queries
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSubject(subject: Subject)
+
+    @Update
+    suspend fun updateSubject(subject: Subject)
+
+    @Delete
+    suspend fun deleteSubject(subject: Subject)
+
+    @Query("SELECT name FROM subject ORDER BY id ASC")
+    fun readSubjectsName(): LiveData<List<String>>
+
+    @Query("SELECT * FROM subject ORDER BY id ASC")
+    fun readSubjectData(): LiveData<List<Subject>>
+
+    //timeTable queries
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addTimeTableItem(timeTableItem: TimeTableItem)
+
+    @Update
+    suspend fun updateTimeTableItem(timeTableItem: TimeTableItem)
+
+    @Delete
+    suspend fun deleteTimeTableItem(timeTableItem: TimeTableItem)
+
+    @Query("SELECT * FROM time_table_item ORDER BY id ASC")
+    fun readTimeTableData(): LiveData<List<TimeTableItem>>
+
+}

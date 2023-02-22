@@ -1,38 +1,59 @@
 package com.example.affirmations.subjects
 
+import android.app.Application
 import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
+import com.example.affirmations.data.ScheduleDatabase
+import com.example.affirmations.model.ScheduleItem
 import com.example.affirmations.model.Subject
+import com.example.affirmations.repository.ScheduleRepository
+import com.example.affirmations.repository.SubjectsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class SubjectsViewModel (val dataSource: SubjectsDataSource) : ViewModel() {
+class SubjectsViewModel (application: Application): AndroidViewModel(application) {
 
-    val subjectsLiveData = dataSource.getSubjects()
+    private val _inputName = MutableLiveData<String>()
+    val inputName: LiveData<String> get() = _inputName
 
-    fun insertSubject(subject: String?) {
-        if (subject == null) {
-            return
-        }
-
-        val newSubject = Subject(
-            Random.nextLong(),
-            subject
-        )
-
-        dataSource.addSubject(newSubject)
+    //setting data from dialogs
+    fun setSubjectName(text: String) {
+        _inputName.value = text
     }
-}
 
-class SubjectViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+    val readSubjectsData: LiveData<List<Subject>>
+    private val subjectsRepository: SubjectsRepository
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SubjectsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return SubjectsViewModel(
-                dataSource = SubjectsDataSource.getDataSource(context.resources)
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    init {
+        val userDao = ScheduleDatabase.getDatabase(
+            application
+        ).scheduleDao()
+        subjectsRepository = SubjectsRepository(userDao)
+        readSubjectsData = subjectsRepository.readSubjectsData
+
+//        subjectsRepository = SubjectsRepository(userDao)
+//        readSubjectsName = subjectsRepository.readSubjectsName
     }
+
+    fun addSubject(subject: Subject){
+        viewModelScope.launch(Dispatchers.IO) {
+            subjectsRepository.addSubject(subject)
+        }
+    }
+
+    fun updateSubject(subject: Subject){
+        viewModelScope.launch(Dispatchers.IO) {
+            subjectsRepository.updateSubject(subject)
+        }
+    }
+
+    fun deleteSubject(subject: Subject){
+        viewModelScope.launch(Dispatchers.IO) {
+            subjectsRepository.deleteSubject(subject)
+        }
+    }
+
+
+
 }

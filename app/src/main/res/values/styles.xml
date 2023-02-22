@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    dialogs style-->
-    <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.Material3">
-        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
-        <item name="shapeAppearanceOverlay">@null</item>
-    </style>
-
+<!--    dialogs styles-->
     <style name="MaterialAlertDialog.App.Title.Text" parent="MaterialAlertDialog.Material3.Title.Text">
-        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.BodyLarge</item>
     </style>
 
-    <style name="Widget.App.Button" parent="Widget.Material3.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/blue</item>
+<!--    time picker styles-->
+    <style name="timePickerTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="chipStyle">@style/chipStyle</item>
+        <item name="materialCircleRadius">28dp</item>
+        <item name="materialTimePickerTitleStyle">@style/TextAppearance.Material3.BodyLarge</item>
     </style>
 
-    <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">28dp</item>
+    <style name="chipStyle" parent="Widget.Material3.MaterialTimePicker.Display">
+        <item name="chipBackgroundColor">@color/light_gray</item>
     </style>
 </resources>

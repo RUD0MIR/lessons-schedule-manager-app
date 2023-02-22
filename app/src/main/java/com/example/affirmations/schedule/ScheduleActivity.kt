@@ -28,6 +28,7 @@ import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.affirmations.R
 import com.example.affirmations.adapter.DaysPagerAdapter
@@ -35,7 +36,6 @@ import com.example.affirmations.time_table.TimeTableActivity
 import com.example.affirmations.data.daysOfWeek
 import com.example.affirmations.databinding.ActivityScheduleBinding
 import com.example.affirmations.subjects.SubjectsActivity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.time.LocalDate
@@ -52,11 +52,7 @@ class ScheduleActivity : FragmentActivity() {
     private val context = this
 
     private lateinit var binding: ActivityScheduleBinding
-
-    private val scheduleViewModel by viewModels<ScheduleViewModel> {
-        ScheduleViewModelFactory(this)
-    }
-
+    private lateinit var scheduleViewModel: ScheduleViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +60,6 @@ class ScheduleActivity : FragmentActivity() {
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
 
         binding.topAppBar.setNavigationOnClickListener {v: View ->
             showAppBarMenu(v, R.menu.schedule_app_bar_menu)

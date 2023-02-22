@@ -1,42 +1,52 @@
 package com.example.affirmations.schedule
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.affirmations.data.ScheduleDatabase
 import com.example.affirmations.model.ScheduleItem
-import kotlin.random.Random
+import com.example.affirmations.model.Subject
+import com.example.affirmations.repository.ScheduleRepository
+import com.example.affirmations.repository.SubjectsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class ScheduleViewModel (val dataSource: ScheduleDataSource) : ViewModel() {
+class ScheduleViewModel (application: Application): AndroidViewModel(application) {
 
-    val scheduleLiveData = dataSource.getScheduleList()
+    val readScheduleData: LiveData<List<ScheduleItem>>
+    private val scheduleRepository: ScheduleRepository
 
-    fun insertScheduleItem(subject: String?, time: String?, number: Int, dayOfWeek: String) {
-        if (subject == null || time == null || number == 0) {
-            return
-        }
+    val readSubjectsName: LiveData<List<String>>
+    private val subjectsRepository: SubjectsRepository
 
-        val newScheduleItem = ScheduleItem(
-            Random.nextLong(),
-            subject,
-            time,
-            number,
-            dayOfWeek
-        )
+    init {
+        val userDao = ScheduleDatabase.getDatabase(
+            application
+        ).scheduleDao()
+        scheduleRepository = ScheduleRepository(userDao)
+        readScheduleData = scheduleRepository.readScheduleData
 
-        dataSource.addScheduleItem(newScheduleItem)
+        subjectsRepository = SubjectsRepository(userDao)
+        readSubjectsName = subjectsRepository.readSubjectsName
     }
-}
 
-class ScheduleViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ScheduleViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ScheduleViewModel(
-                dataSource = ScheduleDataSource.getDataSource(context.resources)
-            ) as T
+    fun addScheduleItem(scheduleItem: ScheduleItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            scheduleRepository.addScheduleItem(scheduleItem)
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
-}
 
+    fun updateScheduleItem(scheduleItem: ScheduleItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            scheduleRepository.updateScheduleItem(scheduleItem)
+        }
+    }
+
+    fun deleteScheduleItem(scheduleItem: ScheduleItem){
+        viewModelScope.launch(Dispatchers.IO) {
+            scheduleRepository.deleteScheduleItem(scheduleItem)
+        }
+    }
+
+}
