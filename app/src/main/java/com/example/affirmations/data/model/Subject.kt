@@ -1,4 +1,4 @@
-package com.example.affirmations.model
+package com.example.affirmations.data.model
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -10,5 +10,5 @@ import kotlinx.android.parcel.Parcelize
 data class Subject(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String
+    var name: String
 ) : Parcelable

@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.Subject
-import com.example.affirmations.model.TimeTableItem
+import com.example.affirmations.data.model.ScheduleItem
+import com.example.affirmations.data.model.Subject
+import com.example.affirmations.data.model.TimeTableItem
 
 @Database(entities = [Subject::class, ScheduleItem::class, TimeTableItem::class],
     version = 1,

@@ -1,26 +1,14 @@
 package com.example.affirmations.subjects
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.*
 import com.example.affirmations.data.ScheduleDatabase
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.Subject
-import com.example.affirmations.repository.ScheduleRepository
-import com.example.affirmations.repository.SubjectsRepository
+import com.example.affirmations.data.model.Subject
+import com.example.affirmations.data.repository.SubjectsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class SubjectsViewModel (application: Application): AndroidViewModel(application) {
-
-    private val _inputName = MutableLiveData<String>()
-    val inputName: LiveData<String> get() = _inputName
-
-    //setting data from dialogs
-    fun setSubjectName(text: String) {
-        _inputName.value = text
-    }
 
     val readSubjectsData: LiveData<List<Subject>>
     private val subjectsRepository: SubjectsRepository
@@ -31,9 +19,6 @@ class SubjectsViewModel (application: Application): AndroidViewModel(application
         ).scheduleDao()
         subjectsRepository = SubjectsRepository(userDao)
         readSubjectsData = subjectsRepository.readSubjectsData
-
-//        subjectsRepository = SubjectsRepository(userDao)
-//        readSubjectsName = subjectsRepository.readSubjectsName
     }
 
     fun addSubject(subject: Subject){

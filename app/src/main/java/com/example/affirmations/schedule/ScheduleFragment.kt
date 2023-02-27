@@ -1,28 +1,24 @@
 package com.example.affirmations.schedule
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
-import androidx.fragment.app.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
 import com.example.affirmations.adapter.ScheduleAdapter
-import com.example.affirmations.databinding.ScheduleDialogItemBinding
-import com.example.affirmations.model.ScheduleItem
+import com.example.affirmations.data.model.ScheduleItem
 import com.example.affirmations.databinding.FragmentScheduleBinding
-import com.example.affirmations.model.Subject
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.schedule_dialog_item.view.*
 
 private const val TAG = "ScheduleFragment"
 const val ARG_OBJECT = "object"
@@ -30,9 +26,6 @@ class ScheduleFragment : Fragment() {
 
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
-
-    private var _addDialogBinding: ScheduleDialogItemBinding? = null
-    private val addDialogBinding get() = _addDialogBinding!!
 
     private lateinit var dayOfWeek: String
     private lateinit var scheduleAdapter: ScheduleAdapter
@@ -44,7 +37,6 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentScheduleBinding.inflate(inflater, container, false)
-        _addDialogBinding = ScheduleDialogItemBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,16 +57,24 @@ class ScheduleFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = scheduleAdapter
 
-        //initializing view model and getting schedule data
+        //initializing view model and getting schedule data from database
         scheduleViewModel = ViewModelProvider(requireActivity())[ScheduleViewModel::class.java]
         scheduleViewModel.readScheduleData.observe(viewLifecycleOwner, Observer { scheduleItems ->
-            scheduleAdapter.submitList(scheduleItems)
+            //filtering list by day of week
+            val filteredList =  scheduleItems.filter { scheduleItem ->
+                scheduleItem.dayOfWeek == dayOfWeek
+            }
+            scheduleAdapter.submitList(filteredList)
         })
 
-        scheduleViewModel.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
-            val adapter = ArrayAdapter(requireContext(), R.layout.schedule_list_item, subjectNames)
-            (addDialogBinding.addScheduleItemTf.editText?.text as? AutoCompleteTextView)?.setAdapter(adapter)
-        })
+        //setting data to exposed menu
+//        val items = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
+//        (dialogBinding.subjectsInputLayout.editText as? MaterialAutoCompleteTextView)?.setSimpleItems(items)
+//
+//        scheduleViewModel.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
+//            val adapter = ArrayAdapter(requireContext(), R.layout.schedule_list_item, subjectNames)
+//            (dialogBinding.subjectsInputLayout.editText?.text as? AutoCompleteTextView)?.setAdapter(adapter)
+//        })
 
         //fab click listener
         binding.addScheduleItemFab.setOnClickListener {
@@ -83,52 +83,101 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun showAddScheduleItemDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(resources.getString(R.string.add_schedule_item_dialog_title))
-            .setView(R.layout.schedule_dialog_item)
-            .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
-            .setPositiveButton(resources.getString(R.string.add_option)) { _, _ ->
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = View.inflate(builder.context, R.layout.schedule_dialog_item, null)
+        val dialog = builder.setTitle(R.string.add_schedule_item_dialog_title)
+            .setView(view)
+            .setNeutralButton(resources.getString(R.string.cancel_option), null)
+            .setPositiveButton(R.string.add_option, null)
+            .create()
 
-                insertDataToDatabase()
-                scheduleAdapter.notifyDataSetChanged()//TODO: use correct notifySetChanged
+        dialog.setOnShowListener{
+            val button: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+            button.setOnClickListener {
+                val subject = view.subjects_input_layout.editText?.text.toString()
+                val lessonTime = view.lesson_time_input_layout.editText?.text.toString()
+
+                if(subject.isNotBlank() && lessonTime.isNotBlank()) {
+                    insertDataToDatabase(subject, lessonTime)
+                    scheduleAdapter.notifyItemInserted(scheduleAdapter.itemCount)
+                    dialog.dismiss()
+                } else {
+                    if(subject.isBlank()) {
+                        view.subjects_input_layout.error = resources.getString(R.string.empty_input_error_message)
+                    }
+
+                    if(lessonTime.isBlank()) {
+                        view.lesson_time_input_layout.error = resources.getString(R.string.empty_input_error_message)
+                    }
+
+                }
             }
-            .show()
+        }
+        dialog.show()
     }
 
-    private fun insertDataToDatabase() {
-        val subject = addDialogBinding.subjectExposedMenu.text.toString()
-        val lessonTime = addDialogBinding.lessonTimeExposedMenu.text.toString()
-
-        if(inputCheck(subject, lessonTime)){
+    private fun insertDataToDatabase(subject: String, lessonTime: String) {
+            val time = lessonTime.substring(2, lessonTime.lastIndex)
+            val number = lessonTime.substring(0, 1)
             val scheduleItem = ScheduleItem(
                 0,
                 subject,
-                lessonTime,
-                1,//TODO: display correct number
+                time,
+                number.toInt(),
                 dayOfWeek
             )
-            // Add Data to Database
             scheduleViewModel.addScheduleItem(scheduleItem)
-        }else{
-            Toast.makeText(requireContext(), subject + lessonTime, Toast.LENGTH_LONG).show()//Please fill out all fields.
-        }
     }
 
-
-
-    //TODO:not for db
     private fun showEditScheduleItemDialog(scheduleItem: ScheduleItem, position: Int) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(resources.getString(R.string.edit_schedule_item_dialog_title))
-            .setView(R.layout.schedule_dialog_item)
-            .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
-            .setPositiveButton(resources.getString(R.string.save_option)) { _, _ ->
-                //TODO:save new item
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        val view = View.inflate(builder.context, R.layout.schedule_dialog_item, null)
+        val dialog = builder.setTitle(R.string.edit_schedule_item_dialog_title)
+            .setView(view)
+            .setNeutralButton(resources.getString(R.string.cancel_option), null)
+            .setPositiveButton(R.string.save_option, null)
+            .create()
+
+        dialog.setOnShowListener{
+            val button: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+            button.setOnClickListener {
+                val subject = view.subjects_input_layout.editText?.text.toString()
+                val lessonTime = view.lesson_time_input_layout.editText?.text.toString()
+
+                if(subject.isNotBlank() && lessonTime.isNotBlank()) {
+                    updateDataInDatabase(subject, lessonTime, scheduleItem)
+                    scheduleAdapter.notifyItemChanged(position)
+                    dialog.dismiss()
+                } else {
+                    if(subject.isBlank()) {
+                        view.subjects_input_layout.error = resources.getString(R.string.empty_input_error_message)
+                    }
+
+                    if(lessonTime.isBlank()) {
+                        view.lesson_time_input_layout.error = resources.getString(R.string.empty_input_error_message)
+                    }
+
+                }
             }
-            .show()
+        }
+        dialog.show()
     }
 
-    //TODO:not for db
+    private fun updateDataInDatabase(subject: String, lessonTime: String, scheduleItem: ScheduleItem) {
+        val time = lessonTime.substring(2, lessonTime.lastIndex)
+        val number = lessonTime.substring(0, 1)
+        val newScheduleItem = ScheduleItem(
+            scheduleItem.id,
+            subject,
+            time,
+            number.toInt(),
+            dayOfWeek
+        )
+        scheduleViewModel.updateScheduleItem(newScheduleItem)
+    }
+
     private fun showDeleteScheduleItemDialog(scheduleItem: ScheduleItem, position: Int) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
@@ -144,11 +193,6 @@ class ScheduleFragment : Fragment() {
         showContextMenu(view, R.menu.list_item_menu, scheduleItem, position)
     }
 
-    private fun inputCheck(subject: String, lessonTime: String): Boolean{
-        return !(TextUtils.isEmpty(subject) && TextUtils.isEmpty(lessonTime))
-    }
-    
-    //TODO:not for db
     private fun showContextMenu(
         v: View,
         @MenuRes menuRes: Int,

@@ -5,10 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.affirmations.data.ScheduleDatabase
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.Subject
-import com.example.affirmations.repository.ScheduleRepository
-import com.example.affirmations.repository.SubjectsRepository
+import com.example.affirmations.data.model.ScheduleItem
+import com.example.affirmations.data.repository.ScheduleRepository
+import com.example.affirmations.data.repository.SubjectsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

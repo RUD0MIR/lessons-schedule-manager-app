@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.affirmations.R
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.Subject
+import com.example.affirmations.data.model.Subject
 
 class SubjectsAdapter (
     private val context: Context,

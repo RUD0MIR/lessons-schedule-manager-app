@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_schedule_item_tf"
+        android:id="@+id/subjects_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -14,17 +14,16 @@
         android:layout_marginVertical="8dp"
         android:layout_marginHorizontal="16dp">
 
-        <AutoCompleteTextView
-            android:id="@+id/subject_exposed_menu"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        android:id="@+id/subject_exposed_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:labelFor="@id/subject_exposed_menu"
-            />
+            android:inputType="text"
+        android:labelFor="@id/subject_exposed_menu"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/add_timetbl_item_tf"
+        android:id="@+id/lesson_time_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -32,11 +31,11 @@
         android:layout_marginVertical="8dp"
         android:layout_marginHorizontal="16dp">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/lesson_time_exposed_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
+            android:inputType="text"
             android:labelFor="@+id/lesson_time_exposed_menu"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

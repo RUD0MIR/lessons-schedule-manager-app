@@ -4,6 +4,12 @@
 
     <string name="add_item_fab_text">Add item</string>
     <string name="empty_input_error_message">Заполните поле</string>
+    <string name="subjects_name">Название предмета</string>
+    <string name="subject_name_hint">Название предмета</string>
+    <string name="lesson_time_hint">Время урока</string>
+
+    <string name="time_sample">%1$s:%2$s</string>
+    <string name="lesson_number_sample">%1$d</string>
 
     <!--menus options-->
     <string name="edit_option">Изменить</string>
@@ -20,12 +26,6 @@
     <string name="schedule_page_title">Расписание</string>
     <string name="time_table_page_title">Расписание звонков</string>
     <string name="subjects_page_title">Предметы</string>
-
-    <string name="time_sample">%1$s:%2$s</string>
-
-    <string name="subjects_name">Название предмета</string>
-    <string name="subject_name_hint">Название предмета</string>
-    <string name="lesson_time_hint">Время урока</string>
 
 <!-- dialog titles-->
     <string name="add_schedule_item_dialog_title">Добавление урока</string>

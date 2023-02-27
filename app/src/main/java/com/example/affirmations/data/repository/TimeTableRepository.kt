@@ -1,9 +1,8 @@
-package com.example.affirmations.repository
+package com.example.affirmations.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.affirmations.data.ScheduleDao
-import com.example.affirmations.model.Subject
-import com.example.affirmations.model.TimeTableItem
+import com.example.affirmations.data.model.TimeTableItem
 
 class TimeTableRepository (private val scheduleDao: ScheduleDao) {
 

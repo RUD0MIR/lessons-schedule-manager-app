@@ -2,9 +2,9 @@ package com.example.affirmations.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.Subject
-import com.example.affirmations.model.TimeTableItem
+import com.example.affirmations.data.model.ScheduleItem
+import com.example.affirmations.data.model.Subject
+import com.example.affirmations.data.model.TimeTableItem
 
 
 @Dao
@@ -20,7 +20,7 @@ interface ScheduleDao {
     @Delete
     suspend fun deleteScheduleItem(scheduleItem: ScheduleItem)
 
-    @Query("SELECT * FROM schedule_item ORDER BY id ASC")
+    @Query("SELECT * FROM schedule_item ORDER BY number ASC")
     fun readScheduleData(): LiveData<List<ScheduleItem>>
 
     //subjects queries

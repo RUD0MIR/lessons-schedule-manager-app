@@ -1,12 +1,5 @@
 package com.example.affirmations.data
 
-import android.content.res.Resources
-import com.example.affirmations.R
-import com.example.affirmations.model.Subject
-import com.example.affirmations.model.ScheduleItem
-import com.example.affirmations.model.TimeTableItem
-import kotlin.random.Random
-
 //fun scheduleList(resources: Resources): List<ScheduleItem> {
 //        return mutableListOf(
 //                ScheduleItem(
