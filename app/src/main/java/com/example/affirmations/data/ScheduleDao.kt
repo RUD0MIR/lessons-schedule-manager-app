@@ -52,4 +52,7 @@ interface ScheduleDao {
     @Query("SELECT * FROM time_table_item ORDER BY id ASC")
     fun readTimeTableData(): LiveData<List<TimeTableItem>>
 
+    @Query("SELECT lesson_time FROM time_table_item ORDER BY id ASC")
+    fun readLessonsTime(): LiveData<List<String>>
+
 }

@@ -10,6 +10,7 @@
 
     <string name="time_sample">%1$s:%2$s</string>
     <string name="lesson_number_sample">%1$d</string>
+    <string name="lesson_time_sample">%1$d урок %2$s</string>
 
     <!--menus options-->
     <string name="edit_option">Изменить</string>

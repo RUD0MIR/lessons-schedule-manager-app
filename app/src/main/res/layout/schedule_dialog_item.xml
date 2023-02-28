@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -18,7 +17,7 @@
         android:id="@+id/subject_exposed_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="none"
         android:labelFor="@id/subject_exposed_menu"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -35,7 +34,7 @@
             android:id="@+id/lesson_time_exposed_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="none"
             android:labelFor="@+id/lesson_time_exposed_menu"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

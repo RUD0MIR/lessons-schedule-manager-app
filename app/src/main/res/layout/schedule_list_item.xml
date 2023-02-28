@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/timetb_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="10:10-13:20"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"

@@ -7,6 +7,7 @@ import com.example.affirmations.data.model.TimeTableItem
 class TimeTableRepository (private val scheduleDao: ScheduleDao) {
 
     val readTimeTableData: LiveData<List<TimeTableItem>> = scheduleDao.readTimeTableData()
+    val readLessonsTime: LiveData<List<String>> = scheduleDao.readLessonsTime()
 
     suspend fun addTimeTableItem(timeTableItem: TimeTableItem){
         scheduleDao.addTimeTableItem(timeTableItem)

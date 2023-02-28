@@ -8,6 +8,7 @@ import com.example.affirmations.data.ScheduleDatabase
 import com.example.affirmations.data.model.ScheduleItem
 import com.example.affirmations.data.repository.ScheduleRepository
 import com.example.affirmations.data.repository.SubjectsRepository
+import com.example.affirmations.data.repository.TimeTableRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,15 +20,22 @@ class ScheduleViewModel (application: Application): AndroidViewModel(application
     val readSubjectsName: LiveData<List<String>>
     private val subjectsRepository: SubjectsRepository
 
+    val readLessonsTime: LiveData<List<String>>
+    private val timeTableRepository: TimeTableRepository
+
     init {
         val userDao = ScheduleDatabase.getDatabase(
             application
         ).scheduleDao()
+
         scheduleRepository = ScheduleRepository(userDao)
         readScheduleData = scheduleRepository.readScheduleData
 
         subjectsRepository = SubjectsRepository(userDao)
         readSubjectsName = subjectsRepository.readSubjectsName
+
+        timeTableRepository = TimeTableRepository(userDao)
+        readLessonsTime = timeTableRepository.readLessonsTime
     }
 
     fun addScheduleItem(scheduleItem: ScheduleItem){

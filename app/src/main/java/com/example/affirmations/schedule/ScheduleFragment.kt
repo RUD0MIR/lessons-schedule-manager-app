@@ -18,6 +18,7 @@ import com.example.affirmations.adapter.ScheduleAdapter
 import com.example.affirmations.data.model.ScheduleItem
 import com.example.affirmations.databinding.FragmentScheduleBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import kotlinx.android.synthetic.main.schedule_dialog_item.view.*
 
 private const val TAG = "ScheduleFragment"
@@ -67,14 +68,9 @@ class ScheduleFragment : Fragment() {
             scheduleAdapter.submitList(filteredList)
         })
 
-        //setting data to exposed menu
-//        val items = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
-//        (dialogBinding.subjectsInputLayout.editText as? MaterialAutoCompleteTextView)?.setSimpleItems(items)
-//
-//        scheduleViewModel.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
-//            val adapter = ArrayAdapter(requireContext(), R.layout.schedule_list_item, subjectNames)
-//            (dialogBinding.subjectsInputLayout.editText?.text as? AutoCompleteTextView)?.setAdapter(adapter)
-//        })
+
+
+
 
         //fab click listener
         binding.addScheduleItemFab.setOnClickListener {
@@ -85,6 +81,27 @@ class ScheduleFragment : Fragment() {
     private fun showAddScheduleItemDialog() {
         val builder = MaterialAlertDialogBuilder(requireContext())
         val view = View.inflate(builder.context, R.layout.schedule_dialog_item, null)
+
+        //setting data to exposed menu
+        scheduleViewModel.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
+            val subjectsExposedMenu = (view.subjects_input_layout.editText as? MaterialAutoCompleteTextView)
+            subjectsExposedMenu?.setSimpleItems(subjectNames.toTypedArray())
+        })
+
+        //setting data to exposed menu
+        scheduleViewModel.readLessonsTime.observe(viewLifecycleOwner, Observer { lessonsTime ->
+            val subjectsExposedMenu =
+                (view.lesson_time_input_layout.editText as? MaterialAutoCompleteTextView)
+            val lessonsTimeArray = Array(lessonsTime.size) {""}
+
+            for(i in lessonsTime.indices) {
+                lessonsTimeArray[i] =
+                    getString(R.string.lesson_time_sample, i + 1, lessonsTime[i])
+            }
+
+            subjectsExposedMenu?.setSimpleItems(lessonsTimeArray)
+        })
+
         val dialog = builder.setTitle(R.string.add_schedule_item_dialog_title)
             .setView(view)
             .setNeutralButton(resources.getString(R.string.cancel_option), null)
@@ -96,11 +113,10 @@ class ScheduleFragment : Fragment() {
 
             button.setOnClickListener {
                 val subject = view.subjects_input_layout.editText?.text.toString()
-                val lessonTime = view.lesson_time_input_layout.editText?.text.toString()
+                val lessonTime = view.lesson_time_input_layout.editText?.text.toString().substring(7)
 
                 if(subject.isNotBlank() && lessonTime.isNotBlank()) {
                     insertDataToDatabase(subject, lessonTime)
-                    scheduleAdapter.notifyItemInserted(scheduleAdapter.itemCount)
                     dialog.dismiss()
                 } else {
                     if(subject.isBlank()) {
@@ -118,13 +134,11 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun insertDataToDatabase(subject: String, lessonTime: String) {
-            val time = lessonTime.substring(2, lessonTime.lastIndex)
-            val number = lessonTime.substring(0, 1)
             val scheduleItem = ScheduleItem(
                 0,
                 subject,
-                time,
-                number.toInt(),
+                lessonTime,
+                0,//TODO: correct number
                 dayOfWeek
             )
             scheduleViewModel.addScheduleItem(scheduleItem)
@@ -139,6 +153,8 @@ class ScheduleFragment : Fragment() {
             .setPositiveButton(R.string.save_option, null)
             .create()
 
+        //TODO: like add dialog
+
         dialog.setOnShowListener{
             val button: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 
@@ -148,7 +164,6 @@ class ScheduleFragment : Fragment() {
 
                 if(subject.isNotBlank() && lessonTime.isNotBlank()) {
                     updateDataInDatabase(subject, lessonTime, scheduleItem)
-                    scheduleAdapter.notifyItemChanged(position)
                     dialog.dismiss()
                 } else {
                     if(subject.isBlank()) {
@@ -184,7 +199,6 @@ class ScheduleFragment : Fragment() {
             .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
             .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
                 scheduleViewModel.deleteScheduleItem(scheduleItem)
-                scheduleAdapter.notifyItemRemoved(position)
             }
             .show()
     }
@@ -212,7 +226,6 @@ class ScheduleFragment : Fragment() {
                     true
                 }
                 R.id.disable_option -> {
-
                     scheduleItem.isDisable = !scheduleItem.isDisable
                     scheduleAdapter.notifyItemChanged(position)
                     true

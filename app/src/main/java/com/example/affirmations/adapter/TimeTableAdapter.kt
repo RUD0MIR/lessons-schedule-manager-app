@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.time_table_list_item.view.*
 class TimeTableAdapter (
     private val context: Context,
     private val onItemLongClick: (View, TimeTableItem, Int) -> Unit,
-    private val onIconClick: (View, TimeTableItem) -> Unit,
+    private val onIconClick: (TimeTableItem) -> Unit,
 ) : ListAdapter<TimeTableItem, TimeTableAdapter.TimeTableViewHolder>(TimeTableDiffCallback) {
 
 
@@ -28,7 +28,7 @@ class TimeTableAdapter (
         view: View,
         val context: Context,
         private val onItemLongClick: (View, TimeTableItem, Int) -> Unit,
-        private val onIconClick: (View, TimeTableItem) -> Unit
+        private val onIconClick: (TimeTableItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val lessonTimeTv: TextView = itemView.findViewById(R.id.lesson_time_tv)
@@ -45,9 +45,9 @@ class TimeTableAdapter (
                 return@setOnLongClickListener true
             }
 
-            iconIv.setOnClickListener { icon ->
+            iconIv.setOnClickListener {
                 currentTimeTableItem?.let { timeTableItem ->
-                    onIconClick(icon, timeTableItem)
+                    onIconClick(timeTableItem)
                 }
             }
         }
