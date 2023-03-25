@@ -1,10 +1,10 @@
-package com.example.affirmations.time_table
+package com.example.lessons_schedule.time_table
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.affirmations.data.ScheduleDatabase
-import com.example.affirmations.data.model.TimeTableItem
-import com.example.affirmations.data.repository.TimeTableRepository
+import com.example.lessons_schedule.data.ScheduleDatabase
+import com.example.lessons_schedule.data.model.TimeTableItem
+import com.example.lessons_schedule.data.repository.TimeTableRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

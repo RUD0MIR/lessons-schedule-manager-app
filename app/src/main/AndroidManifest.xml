@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.affirmations">
+    package="com.example.lessons_schedule">
 
     <application
         android:allowBackup="true"
@@ -10,21 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimetableManager">
         <activity
-            android:name=".time_table.TimeTableActivity"
+            android:name="com.example.lessons_schedule.time_table.TimeTableActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".subjects.SubjectsActivity"
+            android:name="com.example.lessons_schedule.subjects.SubjectsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".schedule.ScheduleActivity"
+            android:name="com.example.lessons_schedule.schedule.ScheduleActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

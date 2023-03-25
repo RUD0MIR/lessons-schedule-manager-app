@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.affirmations.schedule
+package com.example.lessons_schedule.schedule
 
 import android.content.Intent
 import android.os.Build
@@ -24,18 +24,16 @@ import android.view.MenuInflater
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.example.affirmations.R
-import com.example.affirmations.adapter.DaysPagerAdapter
-import com.example.affirmations.time_table.TimeTableActivity
-import com.example.affirmations.data.daysOfWeek
-import com.example.affirmations.databinding.ActivityScheduleBinding
-import com.example.affirmations.subjects.SubjectsActivity
+import com.example.lessons_schedule.R
+import com.example.lessons_schedule.adapter.DaysPagerAdapter
+import com.example.lessons_schedule.time_table.TimeTableActivity
+import com.example.lessons_schedule.data.daysOfWeek
+import com.example.lessons_schedule.databinding.ActivityScheduleBinding
+import com.example.lessons_schedule.subjects.SubjectsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.time.LocalDate

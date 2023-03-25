@@ -1,10 +1,10 @@
-package com.example.affirmations.data
+package com.example.lessons_schedule.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.affirmations.data.model.ScheduleItem
-import com.example.affirmations.data.model.Subject
-import com.example.affirmations.data.model.TimeTableItem
+import com.example.lessons_schedule.data.model.ScheduleItem
+import com.example.lessons_schedule.data.model.Subject
+import com.example.lessons_schedule.data.model.TimeTableItem
 
 
 @Dao
@@ -54,5 +54,8 @@ interface ScheduleDao {
 
     @Query("SELECT lesson_time FROM time_table_item ORDER BY id ASC")
     fun readLessonsTime(): LiveData<List<String>>
+
+    @Query("SELECT lesson_time FROM time_table_item WHERE lesson_number = :lessonNumber")
+    suspend fun getLessonTimeByLessonNumber(lessonNumber: Int): String
 
 }

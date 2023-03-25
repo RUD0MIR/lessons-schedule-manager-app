@@ -1,4 +1,4 @@
-package com.example.affirmations.adapter
+package com.example.lessons_schedule.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.affirmations.R
-import com.example.affirmations.data.model.ScheduleItem
+import com.example.lessons_schedule.R
+import com.example.lessons_schedule.data.model.ScheduleItem
 
 
 class ScheduleAdapter(

@@ -1,8 +1,8 @@
-package com.example.affirmations.data.repository
+package com.example.lessons_schedule.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.affirmations.data.ScheduleDao
-import com.example.affirmations.data.model.TimeTableItem
+import com.example.lessons_schedule.data.ScheduleDao
+import com.example.lessons_schedule.data.model.TimeTableItem
 
 class TimeTableRepository (private val scheduleDao: ScheduleDao) {
 
@@ -21,4 +21,7 @@ class TimeTableRepository (private val scheduleDao: ScheduleDao) {
         scheduleDao.deleteTimeTableItem(timeTableItem)
     }
 
+    suspend fun getLessonTimeByLessonNumber(lessonNumber: Int): String {
+        return scheduleDao.getLessonTimeByLessonNumber(lessonNumber)
+    }
 }

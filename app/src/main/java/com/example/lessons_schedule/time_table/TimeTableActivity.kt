@@ -1,9 +1,8 @@
-package com.example.affirmations.time_table
+package com.example.lessons_schedule.time_table
 
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
-import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.MenuRes
@@ -11,16 +10,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.affirmations.R
-import com.example.affirmations.adapter.TimeTableAdapter
-import com.example.affirmations.data.model.ScheduleItem
-import com.example.affirmations.data.model.Subject
-import com.example.affirmations.data.model.TimeTableItem
-import com.example.affirmations.databinding.ActivityTimeTableBinding
+import com.example.lessons_schedule.R
+import com.example.lessons_schedule.adapter.TimeTableAdapter
+import com.example.lessons_schedule.data.model.TimeTableItem
+import com.example.lessons_schedule.databinding.ActivityTimeTableBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import kotlinx.android.synthetic.main.time_table_list_item.view.*
 
 
 private const val TAG = "TimeTableActivity"
@@ -43,6 +39,7 @@ class TimeTableActivity : FragmentActivity() {
         //Recycler view and data
         timeTableAdapter = TimeTableAdapter(
             context = context,
+            resources = resources,
             onItemLongClick =  { itemView, timeTableItem, position ->
             adapterOnLongClick(
                 itemView,
@@ -69,9 +66,6 @@ class TimeTableActivity : FragmentActivity() {
         binding.addTimetblFab.setOnClickListener {
             showAddTimePicker()
         }
-
-
-
     }
 
     private fun showDeleteTimeTableItemDialog(timeTableItem: TimeTableItem) {
@@ -92,6 +86,7 @@ class TimeTableActivity : FragmentActivity() {
             val newItem = TimeTableItem(
                 lastItem.id,
                 lastItem.lessonTime,
+                lastItem.lessonNumber,
                 isIconDisplayed = true
             )
             timeTableViewModel.updateTimeTableItem(newItem)
@@ -128,7 +123,12 @@ class TimeTableActivity : FragmentActivity() {
 
     private fun insertDataToDatabase(hour: String, minute: String) {
         val time = getString(R.string.time_sample, hour, minute)
-        val timeTableItem = TimeTableItem(0, time, isIconDisplayed = true)
+        val timeTableItem = TimeTableItem(
+            0,
+            time,
+            timeTableAdapter.itemCount + 1,
+            isIconDisplayed = true
+        )
         timeTableViewModel.addTimeTableItem(timeTableItem)
     }
 
@@ -139,6 +139,7 @@ class TimeTableActivity : FragmentActivity() {
             val newItem = TimeTableItem(
                 penultimateItem.id,
                 penultimateItem.lessonTime,
+                penultimateItem.lessonNumber,
                 isIconDisplayed = false
             )
             timeTableViewModel.updateTimeTableItem(newItem)
@@ -167,17 +168,26 @@ class TimeTableActivity : FragmentActivity() {
         picker.addOnPositiveButtonClickListener {
             hour = getTimeValue(picker.hour.toString())
             minute = getTimeValue(picker.minute.toString())
-            updateDataInDatabase(hour, minute, timeTableItem)
+            updateDataInDatabase(hour, minute, timeTableItem, position)
         }
     }
 
-    private fun updateDataInDatabase(hour: String, minute: String, timeTableItem: TimeTableItem) {
+    private fun updateDataInDatabase(
+        hour: String,
+        minute: String,
+        timeTableItem: TimeTableItem,
+        position: Int
+    ) {
         val time = getString(R.string.time_sample, hour, minute)
-        val newTimeTAbleItem = TimeTableItem(
+        val isItemLast = position == timeTableAdapter.itemCount - 1
+
+        val newTimeTableItem = TimeTableItem(
             timeTableItem.id,
             time,
+            timeTableItem.lessonNumber,
+            isIconDisplayed = isItemLast
         )
-        timeTableViewModel.updateTimeTableItem(newTimeTAbleItem)
+        timeTableViewModel.updateTimeTableItem(newTimeTableItem)
     }
 
     private fun getTimeValue(time: String): String {
@@ -192,8 +202,6 @@ class TimeTableActivity : FragmentActivity() {
     private fun adapterOnLongClick(view: View, timeTableItem: TimeTableItem, position: Int) {
         showContextMenu(view, R.menu.edit_menu, timeTableItem, position)
     }
-
-
 
     private fun showContextMenu(
         v: View,

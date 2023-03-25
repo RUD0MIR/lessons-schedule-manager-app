@@ -1,10 +1,10 @@
-package com.example.affirmations.subjects
+package com.example.lessons_schedule.subjects
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.affirmations.data.ScheduleDatabase
-import com.example.affirmations.data.model.Subject
-import com.example.affirmations.data.repository.SubjectsRepository
+import com.example.lessons_schedule.data.ScheduleDatabase
+import com.example.lessons_schedule.data.model.Subject
+import com.example.lessons_schedule.data.repository.SubjectsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.affirmations.data.model
+package com.example.lessons_schedule.data.model
 
 import android.os.Parcelable
 import androidx.room.*

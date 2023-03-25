@@ -1,4 +1,4 @@
-package com.example.affirmations.data
+package com.example.lessons_schedule.data
 
 //fun scheduleList(resources: Resources): List<ScheduleItem> {
 //        return mutableListOf(

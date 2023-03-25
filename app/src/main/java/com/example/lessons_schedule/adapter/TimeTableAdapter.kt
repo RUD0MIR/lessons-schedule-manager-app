@@ -1,23 +1,23 @@
-package com.example.affirmations.adapter
+package com.example.lessons_schedule.adapter
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.affirmations.R
-import com.example.affirmations.data.model.TimeTableItem
+import com.example.lessons_schedule.R
+import com.example.lessons_schedule.data.model.TimeTableItem
 import kotlinx.android.synthetic.main.time_table_list_item.view.*
 
 
 class TimeTableAdapter (
     private val context: Context,
+    private val resources: Resources,
     private val onItemLongClick: (View, TimeTableItem, Int) -> Unit,
     private val onIconClick: (TimeTableItem) -> Unit,
 ) : ListAdapter<TimeTableItem, TimeTableAdapter.TimeTableViewHolder>(TimeTableDiffCallback) {
@@ -27,6 +27,7 @@ class TimeTableAdapter (
         (
         view: View,
         val context: Context,
+        private val resources: Resources,
         private val onItemLongClick: (View, TimeTableItem, Int) -> Unit,
         private val onIconClick: (TimeTableItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
@@ -55,7 +56,7 @@ class TimeTableAdapter (
 
         fun bind(timeTableItem: TimeTableItem) {
             lessonTimeTv.text = timeTableItem.lessonTime
-            lessonTv.text = "${absoluteAdapterPosition + 1}"
+            lessonTv.text = resources.getString(R.string.lesson_number_sample, timeTableItem.lessonNumber)
             currentTimeTableItem = timeTableItem
             if(timeTableItem.isIconDisplayed) {
                 itemView.bin_icon_iv.visibility = View.VISIBLE
@@ -69,7 +70,7 @@ class TimeTableAdapter (
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.time_table_list_item, viewGroup, false)
 
-        return TimeTableViewHolder(view, context, onItemLongClick, onIconClick)
+        return TimeTableViewHolder(view, context, resources, onItemLongClick, onIconClick)
     }
 
     override fun onBindViewHolder(viewHolder: TimeTableViewHolder, position: Int) {

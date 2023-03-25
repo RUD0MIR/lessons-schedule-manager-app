@@ -4,13 +4,14 @@
 
     <string name="add_item_fab_text">Add item</string>
     <string name="empty_input_error_message">Заполните поле</string>
+    <string name="item_not_from_menu_error_message">Выберите элемент из списка</string>
     <string name="subjects_name">Название предмета</string>
     <string name="subject_name_hint">Название предмета</string>
-    <string name="lesson_time_hint">Время урока</string>
+    <string name="lesson_number_hint">Номер урока</string>
 
     <string name="time_sample">%1$s:%2$s</string>
-    <string name="lesson_number_sample">%1$d</string>
-    <string name="lesson_time_sample">%1$d урок %2$s</string>
+    <string name="lesson_number_sample">%1$d урок</string>
+    <string name="lessons_numbers_sample">%1$d урок</string>
 
     <!--menus options-->
     <string name="edit_option">Изменить</string>

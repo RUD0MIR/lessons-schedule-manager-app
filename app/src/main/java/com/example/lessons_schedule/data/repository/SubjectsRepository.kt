@@ -1,8 +1,8 @@
-package com.example.affirmations.data.repository
+package com.example.lessons_schedule.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.affirmations.data.ScheduleDao
-import com.example.affirmations.data.model.Subject
+import com.example.lessons_schedule.data.ScheduleDao
+import com.example.lessons_schedule.data.model.Subject
 
 class SubjectsRepository (private val scheduleDao: ScheduleDao) {
 

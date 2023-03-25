@@ -1,4 +1,4 @@
-package com.example.affirmations.subjects
+package com.example.lessons_schedule.subjects
 
 import android.os.Bundle
 import android.view.View
@@ -11,11 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.affirmations.R
-import com.example.affirmations.adapter.SubjectsAdapter
-import com.example.affirmations.databinding.ActivitySubjectsBinding
-import com.example.affirmations.databinding.SubjectsDialogItemBinding
-import com.example.affirmations.data.model.Subject
+import com.example.lessons_schedule.R
+import com.example.lessons_schedule.adapter.SubjectsAdapter
+import com.example.lessons_schedule.databinding.ActivitySubjectsBinding
+import com.example.lessons_schedule.databinding.SubjectsDialogItemBinding
+import com.example.lessons_schedule.data.model.Subject
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.subjects_dialog_item.view.*
 

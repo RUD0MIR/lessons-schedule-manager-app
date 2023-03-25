@@ -1,12 +1,12 @@
-package com.example.affirmations.data
+package com.example.lessons_schedule.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.affirmations.data.model.ScheduleItem
-import com.example.affirmations.data.model.Subject
-import com.example.affirmations.data.model.TimeTableItem
+import com.example.lessons_schedule.data.model.ScheduleItem
+import com.example.lessons_schedule.data.model.Subject
+import com.example.lessons_schedule.data.model.TimeTableItem
 
 @Database(entities = [Subject::class, ScheduleItem::class, TimeTableItem::class],
     version = 1,

@@ -1,12 +1,12 @@
-package com.example.affirmations.adapter
+package com.example.lessons_schedule.adapter
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.affirmations.data.daysOfWeek
-import com.example.affirmations.schedule.ARG_OBJECT
-import com.example.affirmations.schedule.ScheduleFragment
+import com.example.lessons_schedule.data.daysOfWeek
+import com.example.lessons_schedule.schedule.ARG_OBJECT
+import com.example.lessons_schedule.schedule.ScheduleFragment
 
 class DaysPagerAdapter(fragment: FragmentActivity) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 6
