@@ -70,17 +70,12 @@ class ScheduleActivity : FragmentActivity() {
 
         tabLayout = binding.weekTabLayout
 
-
-
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = daysOfWeek()[position]
         }.attach()
+
         selectTabForCurrentDayOfWeek(tabLayout)
-
-
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun selectTabForCurrentDayOfWeek(tabLayout: TabLayout) {
@@ -97,8 +92,6 @@ class ScheduleActivity : FragmentActivity() {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.schedule_app_bar_menu, menu)
     }
-
-
 
     private fun showAppBarMenu(view: View, @MenuRes menuRes: Int) {
         val menu = PopupMenu(this@ScheduleActivity, view)

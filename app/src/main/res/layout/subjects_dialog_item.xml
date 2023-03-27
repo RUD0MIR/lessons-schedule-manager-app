@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/addSubjectTextField"
+        android:id="@+id/subjectInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/subject_name_hint"
@@ -13,6 +13,7 @@
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/subjectExposedMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />

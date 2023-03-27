@@ -13,23 +13,23 @@ import com.example.lessons_schedule.data.model.Subject
 
 class SubjectsAdapter (
     private val context: Context,
-    private val onItemLongClick: (View, Subject, Int) -> Unit
+    private val onItemLongClick: (View, Subject) -> Unit
 ) : ListAdapter<Subject, SubjectsAdapter.SubjectsViewHolder>(SubjectsDiffCallback) {
 
     class SubjectsViewHolder
         (
         view: View,
         val context: Context,
-        private val onItemLongClick: (View, Subject, Int) -> Unit
+        private val onItemLongClick: (View, Subject) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val subjectNameTv: TextView = itemView.findViewById(R.id.subject_text)
         private var currentSubject: Subject? = null
 
         init {
-            itemView.setOnLongClickListener{ view ->
+            itemView.setOnLongClickListener{ itemView ->
                 currentSubject?.let { subject ->
-                    onItemLongClick(view, subject, absoluteAdapterPosition)
+                    onItemLongClick(itemView, subject)
                 }
                 return@setOnLongClickListener true
             }

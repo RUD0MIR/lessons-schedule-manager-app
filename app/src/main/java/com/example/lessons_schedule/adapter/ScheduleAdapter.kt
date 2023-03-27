@@ -14,14 +14,14 @@ import com.example.lessons_schedule.data.model.ScheduleItem
 
 class ScheduleAdapter(
     private val context: Context,
-    private val onItemLongClick: (View, ScheduleItem, Int) -> Unit,
+    private val onItemLongClick: (View, ScheduleItem) -> Unit,
 ) : ListAdapter<ScheduleItem, ScheduleAdapter.ScheduleViewHolder>(ScheduleDiffCallback) {
 
     class ScheduleViewHolder
         (
         view: View,
         val context: Context,
-        val onItemLongClick: (View, ScheduleItem, Int) -> Unit
+        val onItemLongClick: (View, ScheduleItem) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         private val subjectTv: TextView = itemView.findViewById(R.id.timetb_subject_text)
@@ -30,14 +30,13 @@ class ScheduleAdapter(
         private var currentScheduleItem: ScheduleItem? = null
 
         init {
-            itemView.setOnLongClickListener{ view ->
+            itemView.setOnLongClickListener{ itemView ->
                 currentScheduleItem?.let { scheduleItem ->
-                    onItemLongClick(view, scheduleItem, absoluteAdapterPosition)
+                    onItemLongClick(itemView, scheduleItem)
                 }
                 return@setOnLongClickListener true
             }
         }
-
 
         fun bind(scheduleItem: ScheduleItem) {
             currentScheduleItem = scheduleItem
@@ -45,8 +44,6 @@ class ScheduleAdapter(
             timeTv.text = scheduleItem.lessonTime
             numberTv.text = scheduleItem.number.toString()
         }
-
-
     }
 
     override fun getItemViewType(position: Int): Int {

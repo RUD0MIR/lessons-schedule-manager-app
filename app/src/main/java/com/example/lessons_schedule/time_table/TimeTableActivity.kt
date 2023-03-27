@@ -60,7 +60,7 @@ class TimeTableActivity : FragmentActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             finish()
         }
-
+    //TODO: dialogs logic to components package
 
         //mmmmmmmmmm time picker
         binding.addTimetblFab.setOnClickListener {
