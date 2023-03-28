@@ -16,6 +16,7 @@
 
 package com.example.lessons_schedule.schedule
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.example.lessons_schedule.adapter.DaysPagerAdapter
 import com.example.lessons_schedule.time_table.TimeTableActivity
 import com.example.lessons_schedule.data.daysOfWeek
 import com.example.lessons_schedule.databinding.ActivityScheduleBinding
+import com.example.lessons_schedule.schedule.components.WeekStateDialog
 import com.example.lessons_schedule.subjects.SubjectsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -53,11 +55,27 @@ class ScheduleActivity : FragmentActivity() {
     private lateinit var scheduleViewModel: ScheduleViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private val currentDayOfWeek = LocalDate.now().dayOfWeek.value
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScheduleBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        //showing week state dialog only for the first time app launched
+        val prefs = getPreferences(MODE_PRIVATE)
+        val isFirstStart = prefs?.getBoolean(FIRST_START_PREF, true)
+        //TODO: put weekState to tv from sharedPreferences
+
+        if (isFirstStart != null && isFirstStart) {
+            val weekDialog = WeekStateDialog()
+            weekDialog.show(supportFragmentManager, WeekStateDialog.TAG)
+        }
+
+        val weekState = prefs.getString(WEEK_STATE_PREF, "")
+        binding.tvWeekState.text = weekState
 
         binding.topAppBar.setNavigationOnClickListener {v: View ->
             showAppBarMenu(v, R.menu.schedule_app_bar_menu)
@@ -79,7 +97,7 @@ class ScheduleActivity : FragmentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun selectTabForCurrentDayOfWeek(tabLayout: TabLayout) {
-        val currentDayOfWeek = LocalDate.now().dayOfWeek.value
+
         tabLayout.getTabAt(currentDayOfWeek - 1)?.select()
     }
 
@@ -119,5 +137,13 @@ class ScheduleActivity : FragmentActivity() {
     private fun switchActivities(destination: Class<*>) {
         val switchActivityIntent = Intent(this, destination)
         startActivity(switchActivityIntent)
+    }
+
+    companion object {
+        private const val UPPER_WEEK = "upper_week"
+        private const val LOWER_WEEK = "lower_week"
+
+        const val FIRST_START_PREF = "firstStart"
+        const val WEEK_STATE_PREF = "weekState"
     }
 }

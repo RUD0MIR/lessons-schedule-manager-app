@@ -1,5 +1,6 @@
 package com.example.lessons_schedule.time_table
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
@@ -14,7 +15,7 @@ import com.example.lessons_schedule.R
 import com.example.lessons_schedule.adapter.TimeTableAdapter
 import com.example.lessons_schedule.data.model.TimeTableItem
 import com.example.lessons_schedule.databinding.ActivityTimeTableBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.lessons_schedule.time_table.components.DeleteTimeTableDialog
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 
@@ -26,8 +27,8 @@ class TimeTableActivity : FragmentActivity() {
     private val context = this@TimeTableActivity
 
     private lateinit var binding: ActivityTimeTableBinding
-    private lateinit var timeTableAdapter: TimeTableAdapter
-    private lateinit var timeTableViewModel: TimeTableViewModel
+    private lateinit var adapter: TimeTableAdapter
+    private lateinit var model: TimeTableViewModel
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +38,7 @@ class TimeTableActivity : FragmentActivity() {
         setContentView(view)
 
         //Recycler view and data
-        timeTableAdapter = TimeTableAdapter(
+        adapter = TimeTableAdapter(
             context = context,
             resources = resources,
             onItemLongClick =  { itemView, timeTableItem, position ->
@@ -49,18 +50,17 @@ class TimeTableActivity : FragmentActivity() {
             onIconClick = {timeTableItem -> onIconClick(timeTableItem)})
 
         recyclerView = binding.recyclerView
-        recyclerView.adapter = timeTableAdapter
+        recyclerView.adapter = adapter
 
-        timeTableViewModel = ViewModelProvider(context)[TimeTableViewModel::class.java]
-        timeTableViewModel.readTimeTableData.observe(context, Observer { timeTableItems ->
-            timeTableAdapter.submitList(timeTableItems)
+        model = ViewModelProvider(context)[TimeTableViewModel::class.java]
+        model.readTimeTableData.observe(context, Observer { timeTableItems ->
+            adapter.submitList(timeTableItems)
         })
 
         //listener for app bar menu
         binding.topAppBar.setNavigationOnClickListener {
             finish()
         }
-    //TODO: dialogs logic to components package
 
         //mmmmmmmmmm time picker
         binding.addTimetblFab.setOnClickListener {
@@ -68,135 +68,9 @@ class TimeTableActivity : FragmentActivity() {
         }
     }
 
-    private fun showDeleteTimeTableItemDialog(timeTableItem: TimeTableItem) {
-        MaterialAlertDialogBuilder(context)
-            .setTitle(resources.getString(R.string.delete_lesson_dialog_title))
-            .setNeutralButton(resources.getString(R.string.cancel_option)) { _, _ -> }
-            .setPositiveButton(resources.getString(R.string.delete_option)) { _, _ ->
-                showIconOnLastItem()
-                timeTableViewModel.deleteTimeTableItem(timeTableItem)
-            }
-            .show()
-    }
-
-    private fun showIconOnLastItem() {
-        if(timeTableAdapter.itemCount > 1) {
-            val lastItem = timeTableAdapter.currentList[timeTableAdapter.itemCount - 2]
-
-            val newItem = TimeTableItem(
-                lastItem.id,
-                lastItem.lessonTime,
-                lastItem.lessonNumber,
-                isIconDisplayed = true
-            )
-            timeTableViewModel.updateTimeTableItem(newItem)
-        }
-    }
-
     private fun onIconClick(timeTableItem: TimeTableItem) {
-        showDeleteTimeTableItemDialog(timeTableItem)
-    }
-
-    private fun showAddTimePicker() {
-        val isSystem24Hour = DateFormat.is24HourFormat(context)
-        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-
-        val picker =
-            MaterialTimePicker.Builder()
-                .setTimeFormat(clockFormat)
-                .setTitleText(getString(R.string.add_time_table_item_dialog_title))
-                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setPositiveButtonText(getString(R.string.add_option))
-                .setNegativeButtonText(getString(R.string.cancel_option))
-                .build()
-        picker.show(supportFragmentManager, "tag")
-
-        picker.addOnPositiveButtonClickListener {
-            val hour = getTimeValue(picker.hour.toString())
-            val minute = getTimeValue(picker.minute.toString())
-
-            insertDataToDatabase(hour, minute)
-
-            hideIconOnPenultimateItem()
-        }
-    }
-
-    private fun insertDataToDatabase(hour: String, minute: String) {
-        val time = getString(R.string.time_sample, hour, minute)
-        val timeTableItem = TimeTableItem(
-            0,
-            time,
-            timeTableAdapter.itemCount + 1,
-            isIconDisplayed = true
-        )
-        timeTableViewModel.addTimeTableItem(timeTableItem)
-    }
-
-    private fun hideIconOnPenultimateItem() {
-        if(timeTableAdapter.itemCount > 0) {
-            val penultimateItem = timeTableAdapter.currentList[timeTableAdapter.itemCount - 1]
-
-            val newItem = TimeTableItem(
-                penultimateItem.id,
-                penultimateItem.lessonTime,
-                penultimateItem.lessonNumber,
-                isIconDisplayed = false
-            )
-            timeTableViewModel.updateTimeTableItem(newItem)
-        }
-    }
-
-    private fun showEditTimePicker(timeTableItem: TimeTableItem, position: Int) {
-        val isSystem24Hour = DateFormat.is24HourFormat(context)
-        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-
-        var hour = timeTableItem.lessonTime.substring(0, 2)
-        var minute = timeTableItem.lessonTime.substring(3)
-
-        val picker =
-            MaterialTimePicker.Builder()
-                .setTimeFormat(clockFormat)
-                .setTitleText(getString(R.string.edit_time_table_item_dialog_title))
-                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setPositiveButtonText(getString(R.string.save_option))
-                .setNegativeButtonText(getString(R.string.cancel_option))
-                .setHour(hour.toInt())
-                .setMinute(minute.toInt())
-                .build()
-        picker.show(supportFragmentManager, "tag")
-
-        picker.addOnPositiveButtonClickListener {
-            hour = getTimeValue(picker.hour.toString())
-            minute = getTimeValue(picker.minute.toString())
-            updateDataInDatabase(hour, minute, timeTableItem, position)
-        }
-    }
-
-    private fun updateDataInDatabase(
-        hour: String,
-        minute: String,
-        timeTableItem: TimeTableItem,
-        position: Int
-    ) {
-        val time = getString(R.string.time_sample, hour, minute)
-        val isItemLast = position == timeTableAdapter.itemCount - 1
-
-        val newTimeTableItem = TimeTableItem(
-            timeTableItem.id,
-            time,
-            timeTableItem.lessonNumber,
-            isIconDisplayed = isItemLast
-        )
-        timeTableViewModel.updateTimeTableItem(newTimeTableItem)
-    }
-
-    private fun getTimeValue(time: String): String {
-        val result = if(time.length == 1) {
-            "0$time"
-        } else {
-            time
-        }
-        return result
+        val deleteDialog = DeleteTimeTableDialog(timeTableItem) {model.showIconOnLastItem()}
+        deleteDialog.show(supportFragmentManager, DeleteTimeTableDialog.TAG)
     }
 
     private fun adapterOnLongClick(view: View, timeTableItem: TimeTableItem, position: Int) {
@@ -225,5 +99,79 @@ class TimeTableActivity : FragmentActivity() {
             }
         }
         popup.show()
+    }
+
+   private fun showAddTimePicker() {
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(clockFormat)
+            .setHour(currentHour)
+            .setMinute(currentMinute)
+            .setTitleText(getString(R.string.add_time_table_item_dialog_title))
+            .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+            .setPositiveButtonText(getString(R.string.add_option))
+            .setNegativeButtonText(getString(R.string.cancel_option))
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            val hour = model.getTimeValue(timePicker.hour.toString())
+            val minute = model.getTimeValue(timePicker.minute.toString())
+            val time = getString(R.string.time_sample, hour, minute)
+            val lessonNumber = adapter.itemCount + 1
+
+            val timeTableItem = TimeTableItem(
+                0,
+                time,
+                lessonNumber,
+                isIconDisplayed = true
+            )
+            model.addTimeTableItem(timeTableItem)
+
+            model.hideIconOnPenultimateItem()
+        }
+       timePicker.show(supportFragmentManager, "AddTimePicker")
+    }
+
+    private fun showEditTimePicker(timeTableItem: TimeTableItem, position: Int) {
+        val isSystem24Hour = DateFormat.is24HourFormat(context)
+        val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+        var hour = timeTableItem.lessonTime.substring(0, 2)
+        var minute = timeTableItem.lessonTime.substring(3)
+
+        val timePicker =
+            MaterialTimePicker.Builder()
+                .setTimeFormat(clockFormat)
+                .setTitleText(getString(R.string.edit_time_table_item_dialog_title))
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setPositiveButtonText(getString(R.string.save_option))
+                .setNegativeButtonText(getString(R.string.cancel_option))
+                .setHour(hour.toInt())
+                .setMinute(minute.toInt())
+                .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            hour = model.getTimeValue(timePicker.hour.toString())
+            minute = model.getTimeValue(timePicker.minute.toString())
+
+            val time = getString(R.string.time_sample, hour, minute)
+            val isItemLast = position == adapter.itemCount - 1
+
+            val newTimeTableItem = TimeTableItem(
+                timeTableItem.id,
+                time,
+                timeTableItem.lessonNumber,
+                isIconDisplayed = isItemLast
+            )
+            model.updateTimeTableItem(newTimeTableItem)
+        }
+
+        timePicker.show(supportFragmentManager, "EditTimePicker")
     }
 }

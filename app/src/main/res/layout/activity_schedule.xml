@@ -30,9 +30,18 @@
         app:tabSelectedTextColor="@color/orange">
     </com.google.android.material.tabs.TabLayout>
 
+    <TextView
+        android:id="@+id/tvWeekState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:text="Верняя неделя"
+        android:padding="16dp"
+        android:textColor="@color/dark_gray"
+        />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/schedule_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </androidx.viewpager2.widget.ViewPager2>
+        android:layout_height="match_parent"></androidx.viewpager2.widget.ViewPager2>
 </LinearLayout>
