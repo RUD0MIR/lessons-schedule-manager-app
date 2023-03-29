@@ -46,7 +46,7 @@ class AddScheduleDialog(
             .setNeutralButton(resources.getString(R.string.cancel_option), null)
             .setPositiveButton(R.string.add_option, null)
             .create()
-
+//TODO: add default value to weekState in dialog
         dialog.setOnShowListener{
             val btnPositive: Button =  dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 

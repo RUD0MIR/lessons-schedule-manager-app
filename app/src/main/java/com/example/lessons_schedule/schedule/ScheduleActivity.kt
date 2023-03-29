@@ -16,8 +16,8 @@
 
 package com.example.lessons_schedule.schedule
 
-import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.ContextMenu
@@ -34,11 +34,9 @@ import com.example.lessons_schedule.adapter.DaysPagerAdapter
 import com.example.lessons_schedule.time_table.TimeTableActivity
 import com.example.lessons_schedule.data.daysOfWeek
 import com.example.lessons_schedule.databinding.ActivityScheduleBinding
-import com.example.lessons_schedule.schedule.components.WeekStateDialog
 import com.example.lessons_schedule.subjects.SubjectsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import java.time.LocalDate
 import java.util.*
 
 
@@ -52,10 +50,11 @@ class ScheduleActivity : FragmentActivity() {
     private val context = this
 
     private lateinit var binding: ActivityScheduleBinding
-    private lateinit var scheduleViewModel: ScheduleViewModel
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val currentDayOfWeek = LocalDate.now().dayOfWeek.value
+    private val calendar = Calendar.getInstance()
+    private val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+    lateinit var prefs: SharedPreferences
+    private var weekStates = emptyArray<String>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,19 +63,14 @@ class ScheduleActivity : FragmentActivity() {
         val view = binding.root
         setContentView(view)
 
-        //showing week state dialog only for the first time app launched
-        val prefs = getPreferences(MODE_PRIVATE)
-        val isFirstStart = prefs?.getBoolean(FIRST_START_PREF, true)
-        //TODO: put weekState to tv from sharedPreferences
+        weekStates = resources.getStringArray(R.array.week_states)
+        prefs = getPreferences(MODE_PRIVATE)
 
-        if (isFirstStart != null && isFirstStart) {
-            val weekDialog = WeekStateDialog()
-            weekDialog.show(supportFragmentManager, WeekStateDialog.TAG)
-        }
+        setWeekState(
+            prefs.getString(WEEK_STATE_PREF, weekStates[0])
+        )
 
-        val weekState = prefs.getString(WEEK_STATE_PREF, "")
-        binding.tvWeekState.text = weekState
-
+        //click listener for topAppBar menu
         binding.topAppBar.setNavigationOnClickListener {v: View ->
             showAppBarMenu(v, R.menu.schedule_app_bar_menu)
         }
@@ -93,6 +87,42 @@ class ScheduleActivity : FragmentActivity() {
         }.attach()
 
         selectTabForCurrentDayOfWeek(tabLayout)
+
+        binding.btnWeekState.setOnClickListener {
+            when(prefs.getString(WEEK_STATE_PREF, "")) {
+                weekStates[0] -> {
+                    setWeekState(weekStates[1])
+
+                    with (prefs.edit()) {
+                        putString(WEEK_STATE_PREF, weekStates[1])
+                        apply()
+                    }
+                }
+                weekStates[1] -> {
+                    setWeekState(weekStates[0])
+
+                    with (prefs.edit()) {
+                        putString(WEEK_STATE_PREF, weekStates[0])
+                        apply()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setWeekState(weekState: String?) {
+        binding.tvWeekState.text = weekState
+
+        when(weekState) {
+            weekStates[0] -> {
+                binding.tvWeekState.text = weekStates[0]
+                binding.btnWeekState.setImageResource(R.drawable.ic_arrow_drop_down)
+            }
+            weekStates[1] -> {
+                binding.tvWeekState.text = weekStates[1]
+                binding.btnWeekState.setImageResource(R.drawable.ic_arrow_drop_up)
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -140,10 +170,12 @@ class ScheduleActivity : FragmentActivity() {
     }
 
     companion object {
-        private const val UPPER_WEEK = "upper_week"
-        private const val LOWER_WEEK = "lower_week"
-
         const val FIRST_START_PREF = "firstStart"
         const val WEEK_STATE_PREF = "weekState"
+
+        private const val UPPER_WEEK = 2
+        private const val NEUTRAL_WEEK = 1
+        private const val LOWER_WEEK = 0
+
     }
 }

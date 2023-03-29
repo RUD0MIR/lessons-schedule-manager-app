@@ -90,7 +90,7 @@ class EditScheduleDialog(
         dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
-
+    //TODO: add default value to weekState in dialog
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //setting up subject names exposed menu data
         model.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->

@@ -22,5 +22,8 @@ data class ScheduleItem(
         var dayOfWeek: String,
 
         @ColumnInfo(name = "is_disable")
-        var isDisable: Boolean = false
+        var isDisable: Boolean = false,
+
+//        @ColumnInfo(name = "week_state")
+//        val weekState: Int
 ): Parcelable

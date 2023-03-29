@@ -3,11 +3,12 @@
     <string name="app_name">Timetable manager</string>
 
     <array name="week_states">
-        <item name="upper_week">Верхняя неделя</item>
         <item name="lower_week">Нижняя неделя</item>
+        <item name="neutral_week">Каждую недулю</item>
+        <item name="upper_week">Верхняя неделя</item>
     </array>
 
-    <string name="week_state_exposed_menu_hint">Выберите неделю</string>
+    <string name="week_state_hint">Неделя</string>
 
     <string name="current_week">current_week</string>
     <string name="previous_week">previous_week</string>
