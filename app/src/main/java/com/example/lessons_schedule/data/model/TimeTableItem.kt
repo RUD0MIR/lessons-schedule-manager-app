@@ -13,5 +13,6 @@ data class TimeTableItem(
     val lessonTime: String,//"00:00"
     @ColumnInfo(name = "lesson_number")
     val lessonNumber: Int,//1
+    //@ColumnInfo(name = "is_icon_displayed")
     var isIconDisplayed: Boolean = false
 )

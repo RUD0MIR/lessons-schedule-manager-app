@@ -1,5 +1,6 @@
 package com.example.lessons_schedule.subjects.components
 
+import android.app.ActionBar
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -39,18 +40,26 @@ class AddSubjectDialog: DialogFragment() {
             .setPositiveButton(resources.getString(R.string.add_option), null)
             .create()
 
+        //explicitly sizing the dialog box to prevent it from shrinking when the
+        //keyboard appears
+        dialog.window?.setLayout(
+            ActionBar.LayoutParams.MATCH_PARENT,
+            ActionBar.LayoutParams.WRAP_CONTENT
+        )
+
         dialog.setOnShowListener{
             val button: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 
             button.setOnClickListener {
                 val inputText = binding.subjectExposedMenu.text.toString()
 
-                    if(inputText.isNotBlank()){
-                        val subject = Subject(
-                            0,
-                            inputText
-                        )
-                        model.addSubject(subject)
+                if(inputText.isNotBlank()){
+                    val subject = Subject(
+                        0,
+                        inputText
+                    )
+                    model.addSubject(subject)
+
                     dialog.dismiss()
                 } else {
                     binding.subjectInputLayout.error = getString(R.string.empty_input_error_message)

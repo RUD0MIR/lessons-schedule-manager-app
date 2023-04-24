@@ -1,6 +1,8 @@
 package com.example.lessons_schedule.schedule
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,14 +31,14 @@ import kotlinx.android.synthetic.main.schedule_dialog_item.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private const val TAG = "ScheduleFragment"
-const val ARG_OBJECT = "object"
+
 class ScheduleFragment : Fragment() {
 
     private var _binding: FragmentScheduleBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var dayOfWeek: String
+
     private lateinit var scheduleAdapter: ScheduleAdapter
     private val model: ScheduleViewModel by activityViewModels()
 
@@ -52,9 +54,12 @@ class ScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            dayOfWeek = getString(ARG_OBJECT)!!
+        //getting dayOfWeek from viewPagerAdapter
+        arguments?.takeIf { it.containsKey(ARG_DAY_OF_WEEK) }?.apply {
+            dayOfWeek = getString(ARG_DAY_OF_WEEK)!!
         }
+
+
 
         //Recycler view
         scheduleAdapter = ScheduleAdapter(
@@ -66,11 +71,18 @@ class ScheduleFragment : Fragment() {
 
         //getting schedule data from database
         model.readScheduleData.observe(viewLifecycleOwner, Observer { scheduleItems ->
-            //filtering list by day of week
-            val filteredList =  scheduleItems.filter { scheduleItem ->
-                scheduleItem.dayOfWeek == dayOfWeek
+            //filtering list by day of week and weekState
+            model.weekState.observe(viewLifecycleOwner) { weekState ->
+                val filteredList =  scheduleItems.filter { scheduleItem ->
+                    (scheduleItem.dayOfWeek == dayOfWeek)
+                            &&
+                            (scheduleItem.weekState == weekState
+                                    ||
+                                    scheduleItem.weekState == ScheduleActivity.NEUTRAL_WEEK)
+                }
+                Log.d(TAG, "weekState in ScheduleFragment: $weekState")
+                scheduleAdapter.submitList(filteredList)
             }
-            scheduleAdapter.submitList(filteredList)
         })
 
         //fab click listener
@@ -81,7 +93,7 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun adapterOnLongClick(view: View, scheduleItem: ScheduleItem) {
-        showContextMenu(view, R.menu.list_item_menu, scheduleItem)
+        showContextMenu(view, R.menu.edit_delete_menu, scheduleItem)
     }
 
     private fun showContextMenu(
@@ -104,10 +116,6 @@ class ScheduleFragment : Fragment() {
                     deleteDialog.show(childFragmentManager, DeleteScheduleDialog.TAG)
                     true
                 }
-                R.id.disable_option -> {
-                    model.changeDisabledState(scheduleItem)
-                    true
-                }
                 else -> {
                     Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
                     true
@@ -116,6 +124,12 @@ class ScheduleFragment : Fragment() {
         }
 
         popup.show()
+    }
+
+    companion object {
+        const val TAG = "ScheduleFragment"
+        const val ARG_DAY_OF_WEEK = "dayOfWeek"
+        const val ARG_WEEK_STATE = "weekState"
     }
 }
 

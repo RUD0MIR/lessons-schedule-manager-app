@@ -19,7 +19,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/blue"
+            android:background="@color/primary"
             app:navigationIcon="@drawable/ic_app_bar_menu"
             app:subtitleTextAppearance="@style/TextAppearance.Material3.HeadlineSmall"
             app:title="@string/schedule_page_title"
@@ -31,8 +31,8 @@
         android:id="@+id/week_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/orange"
-        app:tabSelectedTextColor="@color/orange"
+        app:tabIndicatorColor="@color/secondary"
+        app:tabSelectedTextColor="@color/secondary"
         app:layout_constraintEnd_toEndOf="@+id/appBarLayout"
         app:layout_constraintStart_toStartOf="@+id/appBarLayout"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
@@ -45,7 +45,7 @@
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
             tools:text="Верняя неделя"
             android:padding="16dp"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/on_surface"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/week_tab_layout"
             />

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.lessons_schedule.data.daysOfWeek
-import com.example.lessons_schedule.schedule.ARG_OBJECT
 import com.example.lessons_schedule.schedule.ScheduleFragment
 
 class DaysPagerAdapter(fragment: FragmentActivity) : FragmentStateAdapter(fragment) {
@@ -14,7 +13,7 @@ class DaysPagerAdapter(fragment: FragmentActivity) : FragmentStateAdapter(fragme
     override fun createFragment(position: Int): Fragment {
         val fragment = ScheduleFragment()
         fragment.arguments = Bundle().apply {
-            putString(ARG_OBJECT, daysOfWeek()[position])
+            putString(ScheduleFragment.ARG_DAY_OF_WEEK, daysOfWeek()[position])
         }
         return fragment
     }

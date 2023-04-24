@@ -21,7 +21,7 @@
             app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:navigationIconTint="@color/white"
-            android:background="@color/blue"
+            android:background="@color/primary"
             />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +37,8 @@
             android:layout_margin="16dp"
             style="@style/Widget.Material3.FloatingActionButton.Secondary"
             android:contentDescription="@string/add_item_fab_text"
-            app:srcCompat="@drawable/ic_add" />
+            app:srcCompat="@drawable/ic_add"
+            app:tint="@color/on_secondary"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"

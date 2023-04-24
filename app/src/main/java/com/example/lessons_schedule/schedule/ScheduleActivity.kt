@@ -20,14 +20,17 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.ContextMenu
 import android.view.MenuInflater
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.MenuRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.lessons_schedule.R
 import com.example.lessons_schedule.adapter.DaysPagerAdapter
@@ -38,6 +41,7 @@ import com.example.lessons_schedule.subjects.SubjectsActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
+import kotlin.time.Duration.Companion.days
 
 
 private const val TAG = "ScheduleActivity"
@@ -50,9 +54,11 @@ class ScheduleActivity : FragmentActivity() {
     private val context = this
 
     private lateinit var binding: ActivityScheduleBinding
+    private val model: ScheduleViewModel by viewModels()
 
     private val calendar = Calendar.getInstance()
-    private val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+    //getting id of current day that correlate with tabLayout's ids
+    private val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2
     lateinit var prefs: SharedPreferences
     private var weekStates = emptyArray<String>()
 
@@ -67,7 +73,7 @@ class ScheduleActivity : FragmentActivity() {
         prefs = getPreferences(MODE_PRIVATE)
 
         setWeekState(
-            prefs.getString(WEEK_STATE_PREF, weekStates[0])
+            prefs.getInt(WEEK_STATE_PREF, UPPER_WEEK)
         )
 
         //click listener for topAppBar menu
@@ -89,20 +95,20 @@ class ScheduleActivity : FragmentActivity() {
         selectTabForCurrentDayOfWeek(tabLayout)
 
         binding.btnWeekState.setOnClickListener {
-            when(prefs.getString(WEEK_STATE_PREF, "")) {
-                weekStates[0] -> {
-                    setWeekState(weekStates[1])
+            when(prefs.getInt(WEEK_STATE_PREF, UPPER_WEEK)) {
+                UPPER_WEEK -> {
+                    setWeekState(LOWER_WEEK)
 
                     with (prefs.edit()) {
-                        putString(WEEK_STATE_PREF, weekStates[1])
+                        putInt(WEEK_STATE_PREF, LOWER_WEEK)
                         apply()
                     }
                 }
-                weekStates[1] -> {
-                    setWeekState(weekStates[0])
+                LOWER_WEEK -> {
+                    setWeekState(UPPER_WEEK)
 
                     with (prefs.edit()) {
-                        putString(WEEK_STATE_PREF, weekStates[0])
+                        putInt(WEEK_STATE_PREF, UPPER_WEEK)
                         apply()
                     }
                 }
@@ -110,25 +116,30 @@ class ScheduleActivity : FragmentActivity() {
         }
     }
 
-    private fun setWeekState(weekState: String?) {
-        binding.tvWeekState.text = weekState
-
+    private fun setWeekState(weekState: Int) {
         when(weekState) {
-            weekStates[0] -> {
-                binding.tvWeekState.text = weekStates[0]
+            UPPER_WEEK -> {
+                binding.tvWeekState.text = weekStates[UPPER_WEEK]
                 binding.btnWeekState.setImageResource(R.drawable.ic_arrow_drop_down)
+
+                model.setWeekState(UPPER_WEEK)
             }
-            weekStates[1] -> {
-                binding.tvWeekState.text = weekStates[1]
+            LOWER_WEEK -> {
+                binding.tvWeekState.text = weekStates[LOWER_WEEK]
                 binding.btnWeekState.setImageResource(R.drawable.ic_arrow_drop_up)
+
+                model.setWeekState(LOWER_WEEK)
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun selectTabForCurrentDayOfWeek(tabLayout: TabLayout) {
+        if(currentDayOfWeek != 6) {
+            tabLayout.getTabAt(currentDayOfWeek)?.select()
 
-        tabLayout.getTabAt(currentDayOfWeek - 1)?.select()
+        } else {
+            tabLayout.getTabAt(1)?.select()
+        }
     }
 
     override fun onCreateContextMenu(
@@ -170,12 +181,10 @@ class ScheduleActivity : FragmentActivity() {
     }
 
     companion object {
-        const val FIRST_START_PREF = "firstStart"
         const val WEEK_STATE_PREF = "weekState"
 
-        private const val UPPER_WEEK = 2
-        private const val NEUTRAL_WEEK = 1
-        private const val LOWER_WEEK = 0
-
+        const val UPPER_WEEK = 2
+        const val NEUTRAL_WEEK = 1//Do not pass this value to the SharedPreferences
+        const val LOWER_WEEK = 0
     }
 }

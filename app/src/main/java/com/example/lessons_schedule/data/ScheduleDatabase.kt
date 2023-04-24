@@ -29,7 +29,7 @@ abstract class ScheduleDatabase : RoomDatabase() {
                     context.applicationContext,
                     ScheduleDatabase::class.java,
                     "schedule_database"
-                ).build()
+                ).createFromAsset("database/schedule_database").build()
                 INSTANCE = instance
                 return instance
             }

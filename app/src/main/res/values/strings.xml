@@ -4,10 +4,11 @@
 
     <array name="week_states">
         <item name="lower_week">Нижняя неделя</item>
-        <item name="neutral_week">Каждую недулю</item>
+        <item name="neutral_week">Каждую неделю</item>
         <item name="upper_week">Верхняя неделя</item>
     </array>
 
+    <string name="classroom_number_template">%1$s каб.</string>
     <string name="week_state_hint">Неделя</string>
 
     <string name="current_week">current_week</string>
@@ -52,4 +53,5 @@
     <string name="add_time_table_item_dialog_title">Добавление времени урока</string>
     <string name="edit_time_table_item_dialog_title">Изменение времени урока</string>
     <string name="week_state_dialog_title">Выбор недели</string>
+    <string name="classroom_hint">Кабинет</string>
 </resources>

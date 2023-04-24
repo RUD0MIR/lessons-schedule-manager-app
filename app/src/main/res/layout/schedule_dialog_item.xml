@@ -3,16 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="8dp"
+    >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lessonsNumbersInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:hint="@string/lesson_number_hint"
+        android:layout_marginVertical="8dp">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/lessonsNumbersExposedMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:labelFor="@+id/lessonsNumbersExposedMenu"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/subjectsInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="78dp"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:hint="@string/subject_name_hint"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="16dp">
+        android:hint="@string/subject_name_hint">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
         android:id="@+id/subjectsExposedMenu"
@@ -23,27 +40,24 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lessonsNumbersInputLayout"
+        android:id="@+id/classroomInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:hint="@string/lesson_number_hint"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="16dp">
+        android:layout_height="78dp"
+        android:hint="@string/classroom_hint"
+        android:layout_marginVertical="8dp">
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-            android:id="@+id/lessonsNumbersExposedMenu"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tfClassroom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:labelFor="@+id/lessonsNumbersExposedMenu"/>
+            />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:dividerInsetStart="16dp"
-        app:dividerInsetEnd="16dp"
         />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -52,8 +66,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:hint="@string/week_state_hint"
-        android:layout_marginVertical="8dp"
-        android:layout_marginHorizontal="16dp">
+        android:layout_marginVertical="8dp">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/weekTypeExposedMenu"
@@ -61,7 +74,6 @@
             android:layout_height="wrap_content"
             android:inputType="none"
             android:labelFor="@+id/weekTypeExposedMenu"
-            app:simpleItems="@array/week_states"
             />
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

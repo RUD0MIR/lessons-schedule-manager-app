@@ -24,6 +24,8 @@ data class ScheduleItem(
         @ColumnInfo(name = "is_disable")
         var isDisable: Boolean = false,
 
-//        @ColumnInfo(name = "week_state")
-//        val weekState: Int
+        @ColumnInfo(name = "week_state")
+        val weekState: Int,
+
+        val classroom: String
 ): Parcelable

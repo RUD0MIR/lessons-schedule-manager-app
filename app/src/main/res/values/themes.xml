@@ -3,21 +3,21 @@
 <resources>
     <style name="Theme.TimetableManager" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/blue</item>
-        <item name="colorPrimaryContainer">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+        <item name="colorPrimaryContainer">@color/primary</item>
 
 
-        <item name="colorSecondary">@color/orange</item>
-        <item name="colorSecondaryVariant">@color/orange</item>
-        <item name="colorOnSecondary">@color/dark_gray</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_surface</item>
 
-        <item name="colorSecondaryContainer">@color/orange</item>
-        <item name="colorOnPrimaryContainer">@color/dark_gray</item>
+        <item name="colorSecondaryContainer">@color/secondary</item>
+        <item name="colorOnPrimaryContainer">@color/on_surface</item>
 
-        <item name="colorOnSurface">@color/dark_gray</item>
-        <item name="colorSurfaceVariant">@color/light_gray</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
 
         <item name="materialTimePickerTheme">@style/timePickerTheme</item>
         <item name="materialAlertDialogTheme">@style/dialogTheme</item>
@@ -26,16 +26,6 @@
 
 <!--    dialog theme-->
     <style name="dialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-<!--        <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>-->
 <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialog.App.Title.Text</item>
-<!--        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Button</item>-->
-<!--        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Button</item>-->
     </style>
-
-<!--        time picker theme-->
-
-
-
-
-
 </resources>

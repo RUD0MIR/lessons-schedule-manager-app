@@ -1,6 +1,8 @@
 package com.example.lessons_schedule.schedule.components
 
+import android.app.ActionBar
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.lessons_schedule.R
 import com.example.lessons_schedule.data.model.ScheduleItem
 import com.example.lessons_schedule.databinding.ScheduleDialogItemBinding
+import com.example.lessons_schedule.schedule.ScheduleActivity
 import com.example.lessons_schedule.schedule.ScheduleViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +28,7 @@ class EditScheduleDialog(
 ): DialogFragment() {
     lateinit var binding: ScheduleDialogItemBinding
     private val model: ScheduleViewModel by activityViewModels()
+    private var weekStates = emptyArray<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,7 @@ class EditScheduleDialog(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         binding = ScheduleDialogItemBinding.inflate(layoutInflater)
+        weekStates = resources.getStringArray(R.array.week_states)
 
         builder.setView(binding.root)
 
@@ -46,20 +51,30 @@ class EditScheduleDialog(
             .setPositiveButton(R.string.save_option, null)
             .create()
 
+        //explicitly sizing the dialog box to prevent it from shrinking when the
+        //keyboard appears
+        //dialog.window?.setLayout(ActionBar.LayoutParams.MATCH_PARENT, 1755)
+
         //setting up data from the chosen element
         binding.subjectsExposedMenu.setText(scheduleItem.subjectName)
-
         binding.lessonsNumbersExposedMenu.setText("")
         binding.lessonsNumbersExposedMenu.setText(
             getString(R.string.lessons_numbers_sample, scheduleItem.number)
         )
+        binding.weekTypeExposedMenu.setText(weekStates[scheduleItem.weekState])
+        binding.tfClassroom.setText(scheduleItem.classroom)
 
         dialog.setOnShowListener{
             val btnPositive: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
 
+            //setting up week states items for exposed menu
+            binding.weekTypeExposedMenu.setSimpleItems(weekStates)
+
             btnPositive.setOnClickListener {
                 val subjectText = binding.subjectsExposedMenu.text.toString()
                 val lessonTimeText = binding.lessonsNumbersExposedMenu.text.toString()
+                val weekStateText = binding.weekTypeExposedMenu.text.toString()
+                val classroomText = binding.tfClassroom.text.toString()
 
                 if(subjectText.isNotBlank() && lessonTimeText.isNotBlank()) {
                     val lessonNumber =  model.getLessonNumberFromText(lessonTimeText)
@@ -69,9 +84,12 @@ class EditScheduleDialog(
                             subjectText,
                             model.getLessonTimeByLessonNumber(lessonNumber),
                             lessonNumber,
-                            scheduleItem
+                            scheduleItem,
+                            getWeekStateFromText(weekStateText),
+                            classroomText
                         )
                     }
+
                     dialog.dismiss()
                 } else {
                     if(subjectText.isBlank()) {
@@ -83,6 +101,11 @@ class EditScheduleDialog(
                         binding.lessonsNumbersInputLayout.error =
                             resources.getString(R.string.empty_input_error_message)
                     }
+
+                    if(classroomText.isBlank()) {
+                        binding.classroomInputLayout.error =
+                            resources.getString(R.string.empty_input_error_message)
+                    }
                 }
             }
         }
@@ -90,7 +113,7 @@ class EditScheduleDialog(
         dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
-    //TODO: add default value to weekState in dialog
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //setting up subject names exposed menu data
         model.readSubjectsName.observe(viewLifecycleOwner, Observer { subjectNames ->
@@ -113,6 +136,14 @@ class EditScheduleDialog(
 
             binding.lessonsNumbersExposedMenu.setSimpleItems(lessonsNumbersArray)
         })
+    }
+
+    private fun getWeekStateFromText(weekState: String): Int {
+        return when(weekState) {
+            weekStates[ScheduleActivity.UPPER_WEEK] -> ScheduleActivity.UPPER_WEEK
+            weekStates[ScheduleActivity.LOWER_WEEK] -> ScheduleActivity.LOWER_WEEK
+            else -> ScheduleActivity.NEUTRAL_WEEK
+        }
     }
 
     companion object {

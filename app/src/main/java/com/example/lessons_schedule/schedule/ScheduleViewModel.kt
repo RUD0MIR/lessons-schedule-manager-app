@@ -3,7 +3,9 @@ package com.example.lessons_schedule.schedule
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.lessons_schedule.R
 import com.example.lessons_schedule.data.ScheduleDatabase
 import com.example.lessons_schedule.data.model.ScheduleItem
 import com.example.lessons_schedule.data.model.TimeTableItem
@@ -12,6 +14,7 @@ import com.example.lessons_schedule.data.repository.SubjectsRepository
 import com.example.lessons_schedule.data.repository.TimeTableRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 class ScheduleViewModel (application: Application): AndroidViewModel(application) {
     val readScheduleData: LiveData<List<ScheduleItem>>
@@ -23,6 +26,12 @@ class ScheduleViewModel (application: Application): AndroidViewModel(application
     val readTimeTableData: LiveData<List<TimeTableItem>>
     private val timeTableRepository: TimeTableRepository
 
+    private val _weekState = MutableLiveData<Int>(ScheduleActivity.UPPER_WEEK)
+    val weekState: LiveData<Int> get() = _weekState
+    fun setWeekState(weekState: Int) {
+        _weekState.value = weekState
+    }
+
     fun getLessonNumberFromText(lessonTimeText: String): Int {
         return lessonTimeText.substring(0, 1).toInt()
     }
@@ -32,34 +41,54 @@ class ScheduleViewModel (application: Application): AndroidViewModel(application
 
     fun changeDisabledState(scheduleItem: ScheduleItem) {
         val newScheduleItem = ScheduleItem(
-            scheduleItem.id,
-            scheduleItem.subjectName,
-            scheduleItem.lessonTime,
-            scheduleItem.number,
-            scheduleItem.dayOfWeek,
-            !scheduleItem.isDisable
+            id = scheduleItem.id,
+            subjectName = scheduleItem.subjectName,
+            lessonTime = scheduleItem.lessonTime,
+            number = scheduleItem.number,
+            dayOfWeek = scheduleItem.dayOfWeek,
+            isDisable = !scheduleItem.isDisable,
+            weekState = scheduleItem.weekState,
+            classroom = scheduleItem.classroom
         )
         updateScheduleItem(newScheduleItem)
     }
 
-    fun insertDataToDatabase(subject: String, lessonTime: String, lessonNumber: Int, dayOfWeek: String) {
+    fun insertDataToDatabase(
+        subject: String,
+        lessonTime: String,
+        lessonNumber: Int,
+        dayOfWeek: String,
+        weekState: Int,
+        classroom: String
+    ) {
         val scheduleItem = ScheduleItem(
-            0,
-            subject,
-            lessonTime,
-            lessonNumber,
-            dayOfWeek
+            id = 0,
+            subjectName = subject,
+            lessonTime = lessonTime,
+            number = lessonNumber,
+            dayOfWeek = dayOfWeek,
+            weekState = weekState,
+            classroom = classroom
         )
         addScheduleItem(scheduleItem)
     }
 
-    fun updateDataInDatabase(subject: String, lessonTime: String, lessonNumber: Int, scheduleItem: ScheduleItem) {
+    fun updateDataInDatabase(
+        subject: String,
+        lessonTime: String,
+        lessonNumber: Int,
+        scheduleItem: ScheduleItem,
+        weekState: Int,
+        classroom: String
+    ) {
         val newScheduleItem = ScheduleItem(
-            scheduleItem.id,
-            subject,
-            lessonTime,
-            lessonNumber,
-            scheduleItem.dayOfWeek
+            id = scheduleItem.id,
+            subjectName = subject,
+            lessonTime = lessonTime,
+            number = lessonNumber,
+            dayOfWeek = scheduleItem.dayOfWeek,
+            weekState = weekState,
+            classroom = classroom
         )
         updateScheduleItem(newScheduleItem)
     }
