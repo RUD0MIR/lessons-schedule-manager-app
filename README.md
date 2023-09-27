@@ -1,4 +1,4 @@
-![ic_calendar](https://github.com/RUD0MIR/lessons-schedule-manager-app/assets/114794142/34e37f7f-35b2-43d8-88e2-01973ca690d5)
+![ic_calendar](https://github.com/RUD0MIR/lessons-schedule-manager-app/assets/114794142/c616714a-fc98-4a12-9068-48585f5e1e5e)
 
 # Lessons schedule app
 
@@ -14,7 +14,7 @@ A simple app to manage your lessons' schedule, built with MVVM architecture pate
 
 ## Screenshots
 
-![lessons schedule app screen](https://github.com/RUD0MIR/lessons-schedule-manager-app/assets/114794142/cd32d128-084c-46f1-900b-76372faf5077)
+![lessons schedule app screen](https://github.com/RUD0MIR/lessons-schedule-manager-app/assets/114794142/ce571505-9f7f-4700-8edf-b3ff52fce8b8)
 
 ## Used and implemented
 
