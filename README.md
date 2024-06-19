@@ -2,7 +2,7 @@
 
 # Lessons schedule app
 
-A simple app to manage your lessons' schedule, built with MVVM architecture patern.
+A simple app to manage your lessons' schedule
 
 
 ## Features
@@ -18,7 +18,9 @@ A simple app to manage your lessons' schedule, built with MVVM architecture pate
 
 ## Used and implemented
 
+- ViewBinding
 - Room
 - Navigation Component
 - LiveData and ViewModel
 - Kotlin Coroutines
+- MVVM design pattern
