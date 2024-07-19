@@ -20,7 +20,8 @@ A simple app to manage your lessons' schedule
 
 - ViewBinding
 - Room
+- XML
 - Navigation Component
 - LiveData and ViewModel
 - Kotlin Coroutines
-- MVVM design pattern
+- MVVM
